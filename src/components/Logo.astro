@@ -1,0 +1,11 @@
+---
+// STEVANO logo lockup — faceted ice-gem mark + wordmark.
+const { href = '/' , onphoto = true } = Astro.props;
+---
+<a class={`stv-logo${onphoto ? ' stv-logo--onphoto' : ''}`} href={href} aria-label="STEVANO">
+  <svg class="stv-mark" viewBox="8 6 88 86" fill="none" aria-hidden="true">
+    <path class="stv-gem" d="M36 28 L64 28 L84 48 L50 86 L16 48 Z" stroke="#5BA8C9" stroke-width="3" stroke-linejoin="round"></path>
+    <path class="stv-facets" d="M16 48 L84 48 M36 28 L28 48 M64 28 L72 48 M36 28 L50 48 L64 28 M28 48 L50 86 M72 48 L50 86 M50 48 L50 86" stroke="#5BA8C9" stroke-width="1.8"></path>
+  </svg>
+  <span class="stv-wm"><span>S</span><span>T</span><span>E</span><span>V</span><span>A</span><span>N</span><span>O</span></span>
+</a>

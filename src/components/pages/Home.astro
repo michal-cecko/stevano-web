@@ -1,0 +1,123 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t } from '../../i18n/data';
+import { photoStyle, STEVANO_IMG } from '../../data/images';
+import { SERVICE_CARDS } from '../../data/serviceIcons';
+import ServiceCard from '../ServiceCard.astro';
+import ClientsMarquee from '../ClientsMarquee.astro';
+
+const { lang } = Astro.props;
+const home = getRelativeLocaleUrl(lang, '');
+const star = '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"></path>';
+const testimonials = [1, 2, 3];
+---
+<!-- HERO -->
+<section class="hero">
+  <div class="img" style={photoStyle('hero', 'none')}></div>
+  <div class="scrim"></div>
+  <div class="inner">
+    <p class="kick" data-reveal style="--reveal-delay:0ms">{t(lang, 'hero.kick')}</p>
+    <h1 data-reveal style="--reveal-delay:90ms"><span>{t(lang, 'hero.t1')}</span> <span>{t(lang, 'hero.t2')}</span></h1>
+    <p data-reveal style="--reveal-delay:180ms">{t(lang, 'hero.lede')}</p>
+    <a href={`${home}#contact`} class="btn" data-reveal style="--reveal-delay:270ms">{t(lang, 'cta.contact')}</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="band" id="about">
+  <div class="photo" data-reveal="left"><div class="img" style={photoStyle('team', 'soft')}></div></div>
+  <div class="text" data-reveal="right">
+    <p class="lbl">{t(lang, 'about.label')}</p>
+    <h2>{t(lang, 'about.lead')}</h2>
+    <p>{t(lang, 'about.detail')}</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="head" data-reveal>
+    <p class="lbl">{t(lang, 'nav.services')}</p>
+    <h2>{t(lang, 'services.title')}</h2>
+  </div>
+  <div class="scards">
+    {SERVICE_CARDS.map((s, i) => <ServiceCard lang={lang} service={s.key} img={s.img} index={i} />)}
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="port" id="portfolio">
+  <div class="head" data-reveal>
+    <p class="lbl">{t(lang, 'nav.portfolio')}</p>
+    <h2>{t(lang, 'port.title')}</h2>
+  </div>
+  <div class="mosaic">
+    <div class="photo w2 h2" data-reveal style={`--reveal-delay:0ms;${photoStyle('lobby', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.lobby}></div>
+    <div class="photo" data-reveal style={`--reveal-delay:80ms;${photoStyle('restaurant', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.restaurant}></div>
+    <div class="photo" data-reveal style={`--reveal-delay:160ms;${photoStyle('office', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.office}></div>
+    <div class="photo w2" data-reveal style={`--reveal-delay:240ms;${photoStyle('corridor', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.corridor}></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="fb" id="testimonials">
+  <div class="head" data-reveal>
+    <p class="lbl">{t(lang, 'fb.label')}</p>
+    <h2>{t(lang, 'fb.title')}</h2>
+  </div>
+  <div class="fbgrid">
+    {testimonials.map((n) => (
+      <div class="fbcard" data-reveal style={`--reveal-delay:${(n - 1) * 90}ms`}>
+        <div class="stars">
+          {[0, 1, 2, 3, 4].map(() => <svg viewBox="0 0 24 24" fill="currentColor" set:html={star}></svg>)}
+        </div>
+        <p class="quote">{t(lang, `fb.${n}.q`)}</p>
+        <div class="who"><span class="n">{t(lang, `fb.${n}.a`)}</span><span class="r">{t(lang, `fb.${n}.r`)}</span></div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients">
+  <p class="lbl">{t(lang, 'clients.label')}</p>
+  <ClientsMarquee />
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="img" style={photoStyle('room', 'veil')}></div>
+  <div class="inner">
+    <div data-reveal="left">
+      <h2>{t(lang, 'contact.title')}</h2>
+      <div class="cinfo">
+        <div><div class="l">{t(lang, 'contact.email')}</div><div class="v"><a href="mailto:infostevano@gmail.eu">infostevano@gmail.eu</a><br><a href="mailto:stevano.sro@icloud.com">stevano.sro@icloud.com</a></div></div>
+        <div><div class="l">{t(lang, 'contact.phone')}</div><div class="v"><a href="tel:+421905368960">+421 905 368 960</a></div></div>
+        <div><div class="l">{t(lang, 'contact.address')}</div><div class="v">Dolné Rudiny 2956/8, Žilina</div></div>
+      </div>
+    </div>
+    <form id="contact-form" data-mailto="infostevano@gmail.eu" data-reveal="right">
+      <div><label>{t(lang, 'form.name')}</label><input name="name" type="text" required /></div>
+      <div><label>{t(lang, 'form.email')}</label><input name="email" type="email" required /></div>
+      <div><label>{t(lang, 'form.message')}</label><textarea name="message" required></textarea></div>
+      <button class="btn" type="submit">{t(lang, 'form.submit')}</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Zero-backend contact form: opens the visitor's mail client pre-filled.
+  // Swap for Formspree/Netlify Forms via the form's action to collect server-side.
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const to = form.getAttribute('data-mailto');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const get = (n: string) => (form.querySelector(`[name=${n}]`) as HTMLInputElement)?.value.trim() || '';
+      const name = get('name'), email = get('email'), msg = get('message');
+      const subject = 'Website enquiry — ' + (name || 'STEVANO');
+      const body = msg + '\n\n— ' + name + (email ? ' (' + email + ')' : '');
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      form.reset();
+    });
+  }
+</script>

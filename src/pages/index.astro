@@ -1,0 +1,9 @@
+---
+import Base from '../layouts/Base.astro';
+import Home from '../components/pages/Home.astro';
+import { t } from '../i18n/data';
+const lang = 'en';
+---
+<Base lang={lang} title="STEVANO — Premium Commercial Cleaning" description={t(lang, 'hero.lede')} path="">
+  <Home lang={lang} />
+</Base>

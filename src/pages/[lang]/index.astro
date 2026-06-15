@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/pages/Home.astro';
+import { t } from '../../i18n/data';
+export function getStaticPaths() {
+  return ['sk', 'de', 'nl', 'fr'].map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params;
+---
+<Base lang={lang} title="STEVANO — Premium Commercial Cleaning" description={t(lang, 'hero.lede')} path="">
+  <Home lang={lang} />
+</Base>

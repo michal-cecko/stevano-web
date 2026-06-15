@@ -1,0 +1,14 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ServiceDetail from '../../../components/pages/ServiceDetail.astro';
+import { t, STV_SERVICES, STV_SERVICE_META } from '../../../i18n/data';
+export function getStaticPaths() {
+  const langs = ['sk', 'de', 'nl', 'fr'];
+  return langs.flatMap((lang) => STV_SERVICES.map((service) => ({ params: { lang, service } })));
+}
+const { lang, service } = Astro.params;
+const meta = STV_SERVICE_META[service];
+---
+<Base lang={lang} title={`${t(lang, meta.key)} — STEVANO`} description={t(lang, meta.key + '.d')} path={`services/${service}`}>
+  <ServiceDetail lang={lang} service={service} />
+</Base>

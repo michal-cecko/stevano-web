@@ -1,0 +1,52 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { LOCALES, LANG_NAMES, LANG_FULL } from '../i18n/data';
+
+// `path` is the logical page path without a locale prefix, e.g. '' or 'services/hotel'.
+const { lang, path = '' } = Astro.props;
+const search = Astro.url.search; // preserve any ?query
+---
+<div class="stv-ls" data-open="0">
+  <button type="button" class="stv-ls__btn" aria-haspopup="listbox" aria-expanded="false">
+    <span class="stv-ls__cur">{LANG_NAMES[lang]}</span>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+  </button>
+  <ul class="stv-ls__menu" role="listbox">
+    {LOCALES.map((code) => (
+      <li>
+        <a class="stv-ls__opt" role="option" hreflang={code}
+           href={getRelativeLocaleUrl(code, path) + search}
+           aria-selected={code === lang ? 'true' : 'false'}>
+          <span class="name">{LANG_FULL[code]}</span><span class="code">{LANG_NAMES[code]}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  // open/close the language dropdown(s)
+  document.querySelectorAll('.stv-ls').forEach((ls) => {
+    const btn = ls.querySelector('.stv-ls__btn');
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = ls.getAttribute('data-open') === '1';
+      document.querySelectorAll('.stv-ls[data-open="1"]').forEach((o) => {
+        o.setAttribute('data-open', '0');
+        o.querySelector('.stv-ls__btn')?.setAttribute('aria-expanded', 'false');
+      });
+      ls.setAttribute('data-open', open ? '0' : '1');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.stv-ls[data-open="1"]').forEach((o) => {
+      o.setAttribute('data-open', '0');
+      o.querySelector('.stv-ls__btn')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('.stv-ls[data-open="1"]').forEach((o) => o.setAttribute('data-open', '0'));
+  });
+</script>

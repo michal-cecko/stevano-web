@@ -1,0 +1,17 @@
+---
+import { STV_CLIENTS } from '../data/clients';
+// two identical sets so a -50% translate loops seamlessly (CSS in global.css)
+const sets = [false, true];
+---
+<div class="clogos">
+  <div class="clogos-viewport">
+    <div class="clogos-track">
+      {sets.map((dup) => STV_CLIENTS.map((c) => (
+        <span class="clogo" aria-hidden={dup ? 'true' : undefined}>
+          <svg class="clogo-mark" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={c.mark}></svg>
+          <span class="clogo-lock"><span class="clogo-name">{c.name}</span><span class="clogo-sub">{c.sub}</span></span>
+        </span>
+      )))}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 19 76 76">
+  <!-- just the gem, sized to fill the icon -->
+  <path d="M36 28 L64 28 L84 48 L50 86 L16 48 Z" fill="rgba(91,168,201,.16)" stroke="#5BA8C9" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M16 48 L84 48 M36 28 L28 48 M64 28 L72 48 M36 28 L50 48 L64 28 M28 48 L50 86 M72 48 L50 86 M50 48 L50 86" fill="none" stroke="#5BA8C9" stroke-width="2.2" stroke-linejoin="round" opacity=".6"/>
+</svg>

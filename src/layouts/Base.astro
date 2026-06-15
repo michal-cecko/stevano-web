@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { LOCALES } from '../i18n/data';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Preloader from '../components/Preloader.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import Lightbox from '../components/Lightbox.astro';
+
+// path = logical page path without locale prefix, e.g. '' or 'services/hotel'
+const { lang, title, description, path = '' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- mark JS available before paint, so reveal elements only start hidden when they can be revealed -->
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+  <link rel="canonical" href={getAbsoluteLocaleUrl(lang, path)} />
+  {LOCALES.map((l) => (
+    <link rel="alternate" hreflang={l} href={getAbsoluteLocaleUrl(l, path)} />
+  ))}
+  <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('en', path)} />
+</head>
+<body>
+  <Preloader />
+  <Header lang={lang} path={path} />
+  <slot />
+  <Footer lang={lang} />
+  <ScrollReveal />
+  <Lightbox />
+</body>
+</html>

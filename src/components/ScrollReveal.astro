@@ -1,0 +1,42 @@
+---
+// Minimal AOS-equivalent: reveals [data-reveal] elements as they scroll into
+// view. ~0 dependencies. CSS (hidden start + transition) lives in global.css,
+// gated behind .js + prefers-reduced-motion so no-JS / reduced-motion users
+// always see content immediately.
+//
+// The observer waits for the "stv-ready" signal (fired by the preloader when it
+// lifts, or immediately when there's no preloader) so above-the-fold elements
+// like the hero animate in exactly when content first appears.
+---
+<script>
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
+
+    const els = document.querySelectorAll('[data-reveal]');
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+
+  // Start once the intro is ready (preloader done, or no preloader at all).
+  if ((window as any).__stvReady) start();
+  else document.addEventListener('stv-ready', start, { once: true });
+  setTimeout(start, 4000); // safety net if the signal never arrives
+</script>

@@ -1,0 +1,54 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t } from '../i18n/data';
+import Logo from './Logo.astro';
+import LangSwitcher from './LangSwitcher.astro';
+
+const { lang, path = '' } = Astro.props;
+const home = getRelativeLocaleUrl(lang, '');
+const links = [
+  { href: `${home}#about`,     key: 'nav.about' },
+  { href: `${home}#services`,  key: 'nav.services' },
+  { href: `${home}#portfolio`, key: 'nav.portfolio' },
+  { href: `${home}#contact`,   key: 'nav.contact' },
+];
+---
+<header>
+  <Logo href={home} />
+  <div class="nav-right">
+    <nav class="nlinks">
+      {links.map((l) => <a href={l.href}>{t(lang, l.key)}</a>)}
+    </nav>
+    <LangSwitcher lang={lang} path={path} />
+    <button type="button" class="stv-burger" aria-label="Menu" aria-expanded="false">
+      <span class="bars"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+  <div class="stv-mnav" data-open="0">
+    <div class="stv-mnav__inner">
+      {links.map((l) => <a href={l.href}>{t(lang, l.key)}</a>)}
+    </div>
+  </div>
+</header>
+
+<script>
+  // responsive burger menu
+  const header = document.querySelector('header');
+  const burger = header?.querySelector('.stv-burger');
+  const panel = header?.querySelector('.stv-mnav') as HTMLElement | null;
+  if (burger && panel) {
+    const close = () => { panel.dataset.open = '0'; burger.setAttribute('aria-expanded', 'false'); };
+    burger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = panel.dataset.open === '1';
+      panel.dataset.open = open ? '0' : '1';
+      burger.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    panel.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) close(); });
+    document.addEventListener('click', (e) => {
+      if (!panel.contains(e.target as Node) && !burger.contains(e.target as Node)) close();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 900) close(); });
+  }
+</script>

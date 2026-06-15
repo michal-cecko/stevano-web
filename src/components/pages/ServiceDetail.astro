@@ -1,0 +1,76 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { t, STV_SERVICE_META } from '../../i18n/data';
+import { SERVICE_ICONS } from '../../data/serviceIcons';
+import { photoStyle, STEVANO_IMG } from '../../data/images';
+
+const { lang, service } = Astro.props;          // service: 'hotel' | 'rest' | ...
+const meta = STV_SERVICE_META[service];
+const home = getRelativeLocaleUrl(lang, '');
+const included = ['ap.1', 'ap.2', 'ap.3', 'ap.4'];
+const surfaces = ['surf.ceramic', 'surf.stone', 'surf.pvc', 'surf.laminate', 'surf.wood', 'surf.industrial'];
+const check = '<path d="M20 6 9 17l-5-5"></path>';
+---
+<!-- HERO -->
+<section class="sd-hero">
+  <div class="img" style={photoStyle(meta.img[0], 'scrim')}></div>
+  <div class="scrim"></div>
+  <div class="inner">
+    <a class="sd-back" href={`${home}#services`} data-reveal style="--reveal-delay:0ms">← <span>{t(lang, 'sd.back')}</span></a>
+    <p class="sd-eyebrow" data-reveal style="--reveal-delay:80ms">
+      <span class="sd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={SERVICE_ICONS[service]}></svg></span>
+      <span>{t(lang, 'sd.eyebrow')}</span>
+    </p>
+    <h1 data-reveal style="--reveal-delay:160ms">{t(lang, meta.key)}</h1>
+    <p class="lead" data-reveal style="--reveal-delay:240ms">{t(lang, meta.key + '.d')}</p>
+  </div>
+</section>
+
+<!-- BODY -->
+<section class="sd-body">
+  <div class="long" data-reveal>
+    <p class="lbl">{t(lang, 'about.label')}</p>
+    <p>{t(lang, meta.key + '.long')}</p>
+  </div>
+  <div class="sd-incl" data-reveal="right">
+    <h2>{t(lang, 'sd.included')}</h2>
+    <ul>
+      {included.map((k) => (
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={check}></svg>
+          <span>{t(lang, k)}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- SURFACES (machine floor only) -->
+{meta.surfaces && (
+  <section class="sd-surfaces">
+    <p class="sd-surf-title">{t(lang, 'sd.surfaces')}</p>
+    <div class="sd-chips">{surfaces.map((k) => <span>{t(lang, k)}</span>)}</div>
+  </section>
+)}
+
+<!-- GALLERY -->
+<section class="sd-gallery-wrap">
+  <p class="lbl">{t(lang, 'sd.gallery')}</p>
+  <div class="sd-gallery">
+    {meta.img.map((key: string, i: number) => (
+      <div class={`photo${i === 0 ? ' wide' : ''}`} data-reveal style={`--reveal-delay:${i * 90}ms`}
+           data-lb data-lb-group="service-gallery" data-src={STEVANO_IMG[key]}>
+        <div class="img" style={photoStyle(key, 'soft')}></div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sd-cta">
+  <div class="img"></div>
+  <div class="inner" data-reveal>
+    <h2>{t(lang, 'contact.title')}</h2>
+    <a href={`${home}#contact`} class="btn">{t(lang, 'sd.cta')}</a>
+  </div>
+</section>

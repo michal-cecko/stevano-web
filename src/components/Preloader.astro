@@ -1,0 +1,64 @@
+---
+// Fullscreen logo reveal — plays once per browser session. CSS lives in
+// global.css; under prefers-reduced-motion (or no-JS) content shows instantly.
+---
+<noscript><style>.stv-pre{display:none}</style></noscript>
+<div class="stv-pre" role="status" aria-label="STEVANO">
+  <svg class="stv-pre__mark" viewBox="8 6 88 86" fill="none" aria-hidden="true">
+    <path class="stp-gem" d="M36 28 L64 28 L84 48 L50 86 L16 48 Z" stroke="#5BA8C9" stroke-width="3" stroke-linejoin="round"></path>
+    <path class="stp-facets" d="M16 48 L84 48 M36 28 L28 48 M64 28 L72 48 M36 28 L50 48 L64 28 M28 48 L50 86 M72 48 L50 86 M50 48 L50 86" stroke="#5BA8C9" stroke-width="1.8"></path>
+  </svg>
+  <div class="stv-pre__wm"><span>S</span><span>T</span><span>E</span><span>V</span><span>A</span><span>N</span><span>O</span></div>
+  <div class="stv-pre__bar"><i></i></div>
+</div>
+
+<script>
+  const pre = document.querySelector('.stv-pre');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Tell the scroll-reveal observer that content is now visible, so above-the-
+  // fold elements (hero) animate in at the right moment.
+  function signalReady() {
+    (window as any).__stvReady = true;
+    document.dispatchEvent(new CustomEvent('stv-ready'));
+  }
+
+  // Play the reveal only once per session — skip it on later navigations/reloads.
+  let seen = false;
+  try { seen = sessionStorage.getItem('stv-preloaded') === '1'; } catch (e) {}
+
+  if (!pre || reduce || seen) {
+    pre?.remove();
+    signalReady(); // no intro animation → content is visible right away
+  } else {
+    try { sessionStorage.setItem('stv-preloaded', '1'); } catch (e) {}
+    document.documentElement.classList.add('stv-pre-lock');
+    document.body.classList.add('stv-pre-lock');
+
+    // Once the gem has drawn, drop the dash so the closed outline joins cleanly
+    // (a dashed path leaves a butt-cap "chip" at its start/end seam).
+    const gem = pre.querySelector('.stp-gem');
+    if (gem) gem.addEventListener('animationend', () => { (gem as SVGElement).style.strokeDasharray = 'none'; }, { once: true });
+
+    let done = false;
+    const dismiss = () => {
+      if (done) return;
+      done = true;
+      signalReady(); // hero reveals as the preloader fades away
+      pre.classList.add('done');
+      document.documentElement.classList.remove('stv-pre-lock');
+      document.body.classList.remove('stv-pre-lock');
+      pre.addEventListener('transitionend', () => pre.remove(), { once: true });
+      setTimeout(() => pre.remove(), 1200);
+    };
+
+    // Dismiss only after the LAST wordmark letter has finished revealing, plus a
+    // hold so the complete logo is clearly visible. This can't clip the reveal
+    // regardless of machine speed. The timeout is a safety net.
+    const letters = pre.querySelectorAll('.stv-pre__wm span');
+    const last = letters[letters.length - 1];
+    const HOLD = 750;
+    if (last) last.addEventListener('animationend', () => setTimeout(dismiss, HOLD), { once: true });
+    setTimeout(dismiss, 3400); // fallback if animationend was missed
+  }
+</script>

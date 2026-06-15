@@ -1,0 +1,91 @@
+---
+// Reusable image lightbox. Any element with [data-lb] (and a data-src URL,
+// optional data-lb-group to scope prev/next) becomes clickable and opens here.
+// Controls: prev / next / close, a counter, keyboard (←/→/Esc) and backdrop click.
+---
+<div class="stv-lb" data-open="0" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+  <button class="stv-lb__close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button class="stv-lb__nav stv-lb__prev" type="button" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <figure class="stv-lb__stage">
+    <img class="stv-lb__img" alt="" />
+    <figcaption class="stv-lb__count"></figcaption>
+  </figure>
+  <button class="stv-lb__nav stv-lb__next" type="button" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+</div>
+
+<script>
+  const lb = document.querySelector('.stv-lb') as HTMLElement | null;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-lb]'));
+  if (lb && items.length) {
+    const img = lb.querySelector('.stv-lb__img') as HTMLImageElement;
+    const count = lb.querySelector('.stv-lb__count') as HTMLElement;
+    const btnPrev = lb.querySelector('.stv-lb__prev') as HTMLElement;
+    const btnNext = lb.querySelector('.stv-lb__next') as HTMLElement;
+    const btnClose = lb.querySelector('.stv-lb__close') as HTMLElement;
+
+    // group items so prev/next stays within one gallery
+    const groups: Record<string, HTMLElement[]> = {};
+    items.forEach((el) => {
+      const g = el.dataset.lbGroup || 'default';
+      (groups[g] = groups[g] || []).push(el);
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      if (!el.getAttribute('aria-label')) el.setAttribute('aria-label', 'View image');
+    });
+
+    let list: HTMLElement[] = [];
+    let i = 0;
+    let lastFocus: HTMLElement | null = null;
+
+    const render = () => {
+      const el = list[i];
+      img.src = el.dataset.src || '';
+      img.alt = el.getAttribute('aria-label') || '';
+      const multi = list.length > 1;
+      count.textContent = multi ? `${i + 1} / ${list.length}` : '';
+      btnPrev.hidden = btnNext.hidden = !multi;
+    };
+    const open = (el: HTMLElement) => {
+      const g = el.dataset.lbGroup || 'default';
+      list = groups[g];
+      i = list.indexOf(el);
+      lastFocus = el;
+      lb.hidden = false;
+      requestAnimationFrame(() => lb.setAttribute('data-open', '1'));
+      document.documentElement.style.overflow = 'hidden';
+      render();
+      btnClose.focus();
+    };
+    const close = () => {
+      lb.setAttribute('data-open', '0');
+      document.documentElement.style.overflow = '';
+      setTimeout(() => { lb.hidden = true; img.src = ''; }, 250);
+      lastFocus?.focus();
+    };
+    const next = () => { i = (i + 1) % list.length; render(); };
+    const prev = () => { i = (i - 1 + list.length) % list.length; render(); };
+
+    items.forEach((el) => {
+      el.addEventListener('click', () => open(el));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(el); }
+      });
+    });
+    btnNext.addEventListener('click', next);
+    btnPrev.addEventListener('click', prev);
+    btnClose.addEventListener('click', close);
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); }); // backdrop
+    document.addEventListener('keydown', (e) => {
+      if (lb.getAttribute('data-open') !== '1') return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') next();
+      else if (e.key === 'ArrowLeft') prev();
+    });
+  }
+</script>
