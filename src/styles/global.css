@@ -334,7 +334,7 @@
     --head:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
     /* Tailwind-like content container: capped width + responsive side gutter,
        applied to every content row so all pages line up identically. */
-    --container:1280px; --gutter:clamp(20px,5vw,48px);
+    --container:1440px; --gutter:clamp(20px,5vw,48px);
   }
   *{box-sizing:border-box;}
 
