@@ -1,12 +1,18 @@
 ---
 // Fullscreen logo reveal — plays once per browser session. CSS lives in
 // global.css; under prefers-reduced-motion (or no-JS) content shows instantly.
+// The winged crest unfolds from its centre column, then the wordmark reveals.
 ---
 <noscript><style>.stv-pre{display:none}</style></noscript>
 <div class="stv-pre" role="status" aria-label="STEVANO">
-  <svg class="stv-pre__mark" viewBox="8 6 88 86" fill="none" aria-hidden="true">
-    <path class="stp-gem" d="M36 28 L64 28 L84 48 L50 86 L16 48 Z" stroke="#5BA8C9" stroke-width="3" stroke-linejoin="round"></path>
-    <path class="stp-facets" d="M16 48 L84 48 M36 28 L28 48 M64 28 L72 48 M36 28 L50 48 L64 28 M28 48 L50 86 M72 48 L50 86 M50 48 L50 86" stroke="#5BA8C9" stroke-width="1.8"></path>
+  <svg class="stv-pre__mark" viewBox="-6 -6 642 567" fill="none" aria-hidden="true">
+    <path class="stp-mk" pathLength="1" d="M302 551.326L256 500.727V334.91L302 294.891V551.326Z"></path>
+    <path class="stp-mk" pathLength="1" d="M374 334.91V500.727L328 551.326V294.891L374 334.91Z"></path>
+    <path class="stp-mk" pathLength="1" d="M374 251.8V291.559L316.325 240.503L315 239.329L313.675 240.503L256 291.559V251.8L315 189.897L374 251.8Z"></path>
+    <path class="stp-mk" pathLength="1" d="M268.399 201.689L219.387 248.346L2 74.0391V3.97559L268.399 201.689Z"></path>
+    <path class="stp-mk" pathLength="1" d="M173.5 323.049L172.762 322.448L45 218.548V147.098L230 291.477V481.194L80 354.57V285.15L170.254 357.064L173.5 359.65V323.049Z"></path>
+    <path class="stp-mk" pathLength="1" d="M585 218.548L457.238 322.448L456.5 323.049V359.65L459.746 357.064L550 285.15V354.57L400 481.194V291.477L585 147.098V218.548Z"></path>
+    <path class="stp-mk" pathLength="1" d="M628 74.0391L410.612 248.346L361.6 201.689L628 3.97559V74.0391Z"></path>
   </svg>
   <div class="stv-pre__wm"><span>S</span><span>T</span><span>E</span><span>V</span><span>A</span><span>N</span><span>O</span></div>
   <div class="stv-pre__bar"><i></i></div>
@@ -34,11 +40,6 @@
     try { sessionStorage.setItem('stv-preloaded', '1'); } catch (e) {}
     document.documentElement.classList.add('stv-pre-lock');
     document.body.classList.add('stv-pre-lock');
-
-    // Once the gem has drawn, drop the dash so the closed outline joins cleanly
-    // (a dashed path leaves a butt-cap "chip" at its start/end seam).
-    const gem = pre.querySelector('.stp-gem');
-    if (gem) gem.addEventListener('animationend', () => { (gem as SVGElement).style.strokeDasharray = 'none'; }, { once: true });
 
     let done = false;
     const dismiss = () => {
