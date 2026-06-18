@@ -303,7 +303,7 @@
 
 .stv-logo{display:inline-flex;align-items:center;gap:12px;line-height:1;text-decoration:none;}
 .stv-mark{height:37px;width:auto;overflow:visible;flex-shrink:0;}
-.stv-mk{fill:#A6CFE1;stroke:#5CA8C9;stroke-width:5;stroke-linejoin:round;}
+.stv-mk{fill:rgba(91,168,201,.14);stroke:#5BA8C9;stroke-width:5;stroke-linejoin:round;}
 .stv-wm{display:inline-flex;font-family:'Space Grotesk',system-ui,sans-serif;font-weight:700;
   letter-spacing:.14em;color:var(--frost,#F4F6F7);font-size:22px;}
 .stv-wm span{display:inline-block;}
@@ -598,7 +598,7 @@
    floods in — the fill overlaps the tail of the draw so the two read as one
    continuous motion. pathLength=1 normalises the dash so all facets, whatever
    their perimeter, finish drawing together. */
-.stp-mk{fill:#A6CFE1;stroke:#5CA8C9;stroke-width:6;stroke-linejoin:round;stroke-linecap:round;
+.stp-mk{fill:rgba(91,168,201,.14);stroke:#5BA8C9;stroke-width:6;stroke-linejoin:round;stroke-linecap:round;
   stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0;
   animation:stpDraw .95s cubic-bezier(.45,.05,.2,1) .1s forwards, stpFill .6s ease .85s forwards;}
 .stv-pre__wm{position:relative;display:inline-flex;font-family:'Space Grotesk',system-ui,sans-serif;
