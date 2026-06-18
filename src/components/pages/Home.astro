@@ -95,29 +95,54 @@ const testimonials = [1, 2, 3];
         <div><div class="l">{t(lang, 'contact.address')}</div><div class="v">Dolné Rudiny 2956/8, Žilina</div></div>
       </div>
     </div>
-    <form id="contact-form" data-mailto="infostevano@gmail.eu" data-reveal="right">
+    <form id="contact-form" data-reveal="right">
       <div><label>{t(lang, 'form.name')}</label><input name="name" type="text" required /></div>
       <div><label>{t(lang, 'form.email')}</label><input name="email" type="email" required /></div>
       <div><label>{t(lang, 'form.message')}</label><textarea name="message" required></textarea></div>
+      {/* honeypot — hidden from humans, filled by bots; submissions with it set are dropped */}
+      <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
       <button class="btn" type="submit">{t(lang, 'form.submit')}</button>
+      <p class="form-status" role="status" aria-live="polite" hidden></p>
     </form>
   </div>
 </section>
 
 <script>
-  // Zero-backend contact form: opens the visitor's mail client pre-filled.
-  // Swap for Formspree/Netlify Forms via the form's action to collect server-side.
+  // Contact form -> /api/contact (server endpoint sends via Resend).
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {
-    const to = form.getAttribute('data-mailto');
-    form.addEventListener('submit', (e) => {
+    const status = form.querySelector('.form-status') as HTMLElement;
+    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+    const get = (n: string) => (form.querySelector(`[name=${n}]`) as HTMLInputElement)?.value.trim() || '';
+    const say = (msg: string, ok = true) => {
+      status.textContent = msg;
+      status.hidden = false;
+      status.dataset.ok = ok ? '1' : '0';
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const get = (n: string) => (form.querySelector(`[name=${n}]`) as HTMLInputElement)?.value.trim() || '';
-      const name = get('name'), email = get('email'), msg = get('message');
-      const subject = 'Website enquiry — ' + (name || 'STEVANO');
-      const body = msg + '\n\n— ' + name + (email ? ' (' + email + ')' : '');
-      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      form.reset();
+      btn.disabled = true;
+      say('Sending…');
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: get('name'),
+            email: get('email'),
+            message: get('message'),
+            company: get('company'), // honeypot
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) { say('Thanks — your message has been sent.'); form.reset(); }
+        else say('Sorry, something went wrong. Please try again or email us directly.', false);
+      } catch {
+        say('Network error. Please try again or email us directly.', false);
+      } finally {
+        btn.disabled = false;
+      }
     });
   }
 </script>

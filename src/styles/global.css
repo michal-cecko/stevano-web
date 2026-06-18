@@ -459,6 +459,9 @@
   input,textarea{width:100%;background:rgba(13,16,19,.5);border:1px solid var(--bd);border-radius:3px;padding:12px 14px;color:var(--frost);font:inherit;font-size:15px;}
   input:focus,textarea:focus{outline:none;border-color:var(--ice);}
   textarea{resize:vertical;min-height:100px;}
+  .form-status{margin:4px 0 0;font-size:14px;color:var(--mist);}
+  .form-status[data-ok="1"]{color:var(--ice);}
+  .form-status[data-ok="0"]{color:#e0716f;}
 
   footer{padding:40px max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));color:var(--mist);font-size:13px;border-top:1px solid var(--bd);}
 

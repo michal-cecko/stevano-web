@@ -1,0 +1,34 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stevano-web
+    labels:
+      - "traefik.enable=true"
+      # HTTPS router — replace stevano.example with the real domain
+      - "traefik.http.routers.stevanoweb.rule=Host(`stevano.example`)"
+      - "traefik.http.routers.stevanoweb.entrypoints=websecure"
+      - "traefik.http.routers.stevanoweb.tls.certresolver=myresolver"
+      # HTTP -> HTTPS redirect
+      - "traefik.http.routers.stevanoweb-http.rule=Host(`stevano.example`)"
+      - "traefik.http.routers.stevanoweb-http.entrypoints=web"
+      - "traefik.http.routers.stevanoweb-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+      - "traefik.http.services.stevanoweb.loadbalancer.server.port=3000"
+    networks:
+      - web
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      # Set in Dokploy → Environment (do NOT commit secrets)
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - CONTACT_TO=${CONTACT_TO:-}
+      - CONTACT_FROM=${CONTACT_FROM:-}
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
