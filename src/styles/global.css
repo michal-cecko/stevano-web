@@ -410,6 +410,21 @@
   .mosaic .w2{grid-column:span 2;}
   .mosaic .h2{grid-row:span 2;}
 
+  /* aroma & air care — Hygiene Fresh partner */
+  .partner{padding:120px 0;border-top:1px solid var(--bd);}
+  .partner .pwrap{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter);}
+  .partner .ptop{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;}
+  .partner .lbl{font-family:var(--head);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ice);margin:0 0 16px;}
+  .partner h2{font-family:var(--head);font-weight:500;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em;line-height:1.05;margin:0 0 22px;}
+  .partner .lede{color:var(--mist);font-size:16px;line-height:1.8;max-width:52ch;margin:0 0 28px;}
+  .partner .btn{display:inline-flex;align-items:center;gap:9px;}
+  .partner .btn svg{width:16px;height:16px;transition:transform .2s;}
+  .partner .btn:hover svg{transform:translateX(3px);}
+  .partner .pbanner{display:flex;width:fit-content;max-width:100%;align-items:center;gap:10px;padding:10px 18px;border:1px solid rgba(91,168,201,.30);background:rgba(91,168,201,.07);border-radius:100px;margin:0 0 22px;color:var(--frost);font-size:13px;line-height:1.35;}
+  .partner .pbanner .chk{width:16px;height:16px;color:var(--ice);flex:none;}
+  .partner .pvisual{border-radius:8px;overflow:hidden;border:1px solid var(--bd);background:var(--surf);}
+  .partner .pv-shot{display:block;width:100%;height:auto;}
+
   /* testimonials */
   .fb{padding:120px 0;}
   .fb .head{width:100%;max-width:var(--container);margin:0 auto 50px;padding-inline:var(--gutter);}
@@ -457,6 +472,8 @@
     .scard.wide{grid-column:auto;flex-direction:column;align-items:flex-start;height:auto;}
     .scard.wide ul{grid-template-columns:1fr;}
     .mosaic{grid-template-columns:1fr 1fr;}
+    .partner{padding:80px 0;}
+    .partner .ptop{grid-template-columns:1fr;gap:32px;}
     .fbgrid{grid-template-columns:1fr;}
     .fb{padding:80px 0;}
     .clients{padding:60px 0;}

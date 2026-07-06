@@ -10,7 +10,8 @@ export const STEVANO_IMG = {
   spray:      "/img/spray.jpg",
   bathroom:   "/img/bathroom.jpg",
   lounge:     "/img/lounge.jpg",
-  conference: "/img/conference.jpg"
+  conference: "/img/conference.jpg",
+  airaroma:   "/img/airaroma.png"
 };
 
 // graphite tint overlaid on each photo so imagery stays on-brand (Graphite & Ice)

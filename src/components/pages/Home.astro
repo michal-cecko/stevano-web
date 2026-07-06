@@ -4,12 +4,12 @@ import { t } from '../../i18n/data';
 import { photoStyle, STEVANO_IMG } from '../../data/images';
 import { SERVICE_CARDS } from '../../data/serviceIcons';
 import ServiceCard from '../ServiceCard.astro';
-import ClientsMarquee from '../ClientsMarquee.astro';
+// import ClientsMarquee from '../ClientsMarquee.astro'; // Partner logos hidden for now
 
 const { lang } = Astro.props;
 const home = getRelativeLocaleUrl(lang, '');
-const star = '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"></path>';
-const testimonials = [1, 2, 3];
+// const star = '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"></path>'; // Reviews hidden for now
+// const testimonials = [1, 2, 3]; // Reviews hidden for now
 ---
 <!-- HERO -->
 <section class="hero">
@@ -44,6 +44,30 @@ const testimonials = [1, 2, 3];
   </div>
 </section>
 
+<!-- AROMA & AIR CARE · HYGIENE FRESH -->
+<section class="partner" id="products">
+  <div class="pwrap">
+    <div class="ptop">
+      <div data-reveal="left">
+        <p class="lbl">{t(lang, 'prod.label')}</p>
+        <h2>{t(lang, 'prod.title')}<br>{t(lang, 'prod.title2')}</h2>
+        <div class="pbanner">
+          <svg class="chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span>{t(lang, 'prod.note')}</span>
+        </div>
+        <p class="lede">{t(lang, 'prod.body')}</p>
+        <a class="btn" href="https://www.hygienefresh.com/" target="_blank" rel="noopener noreferrer">
+          <span>{t(lang, 'prod.cta')}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="pvisual" data-reveal="right">
+        <img class="pv-shot" src={STEVANO_IMG.airaroma} alt="Hygiene Fresh aroma diffusers" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PORTFOLIO -->
 <section class="port" id="portfolio">
   <div class="head" data-reveal>
@@ -59,6 +83,7 @@ const testimonials = [1, 2, 3];
 </section>
 
 <!-- TESTIMONIALS -->
+{/* Reviews hidden for now
 <section class="fb" id="testimonials">
   <div class="head" data-reveal>
     <p class="lbl">{t(lang, 'fb.label')}</p>
@@ -76,12 +101,15 @@ const testimonials = [1, 2, 3];
     ))}
   </div>
 </section>
+*/}
 
 <!-- CLIENTS -->
+{/* Partner logos hidden for now
 <section class="clients">
   <p class="lbl">{t(lang, 'clients.label')}</p>
   <ClientsMarquee />
 </section>
+*/}
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
