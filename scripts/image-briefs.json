@@ -1,0 +1,145 @@
+{
+  "_comment": "Art-direction briefs for STEVANO site imagery. Consumed by scripts/generate-images.mjs. `style` is prepended and `negative` appended to every prompt. Keys map to src/data/images.ts (STEVANO_IMG). Regenerate one image: `node scripts/generate-images.mjs --only hotel_room`.",
+  "style": "Professional architectural interior photograph of a premium European commercial space, immaculately clean, photorealistic, shot on a full-frame camera with a 24-35mm lens, warm ambient lighting with deep shadows and rich tonal range, restrained muted palette of charcoal, graphite, warm wood, natural stone, stainless steel and glass, crisp reflections on polished surfaces, editorial architectural-magazine quality, center-weighted composition with the key subject kept within the central 60 percent of the frame.",
+  "negative": "No people, no humans, no hands, no faces, no text, no signage, no logos, no brand names, no clutter. Avoid a CGI or 3D-render look, avoid oversaturation, avoid fisheye or wide-angle distortion, avoid watermarks, avoid harsh on-camera flash.",
+  "defaults": { "model": "gemini-2.5-flash-image", "aspect": "3:2", "width": 1200, "height": 800, "quality": 80, "format": "jpg" },
+  "images": [
+    {
+      "key": "hero", "file": "hero.jpg", "aspect": "16:9", "width": 1600, "height": 900, "quality": 82,
+      "style": "Professional architectural interior photograph of a premium European commercial space, immaculately clean, photorealistic, shot on a full-frame camera with a 24-35mm lens, cool blue-hour lighting with crisp even fill, calm neutral palette of cool grey, slate, charcoal, white marble, glass and brushed steel with soft blue tones and minimal warm wood, crisp reflections on polished surfaces, editorial architectural-magazine quality, center-weighted composition with the key subject kept within the central 60 percent of the frame.",
+      "prompt": "A vast modern glass-and-stone atrium lobby photographed at blue hour, monumental architectural scale with a soaring multi-storey ceiling and floor-to-ceiling glazing revealing a deep blue evening sky. A pale grey polished stone floor, just machine-buffed to a mirror finish, reflects cool white ceiling lights and the blue glazing. A subtle just-cleaned sheen runs across the empty floor. Cinematic wide establishing shot conveying premium cleanliness at grand scale, cool and crisp. Keep the upper-right portion of the frame calm and open with soft light and empty ceiling space."
+    },
+
+    {
+      "key": "about", "file": "about.jpg",
+      "style": "Professional architectural interior photograph of a premium European commercial space, immaculately clean, photorealistic, shot on a full-frame camera with a 24-35mm lens, cool even daylight, calm neutral palette of cool grey, slate, charcoal, white stone, glass and brushed steel with soft blue tones and minimal warm wood, crisp reflections on polished surfaces, editorial architectural-magazine quality, center-weighted composition with the key subject kept within the central 60 percent of the frame.",
+      "prompt": "A tidy professional commercial-cleaning setup arranged as an elegant still life inside a bright, cool-toned modern interior with pale grey walls, a white stone floor and soft neutral daylight. A stainless-steel janitorial service cart neatly stocked with folded blue and grey microfibre cloths, spray bottles of cleaning products and an organizer caddy, with a compact walk-behind floor scrubber-drier machine parked beside it on a spotless polished floor. Systematic, orderly and professional, calm cool neutral palette."
+    },
+
+    {
+      "key": "hotel_room", "file": "hotel-room.jpg",
+      "prompt": "A luxury hotel guest room freshly serviced and immaculate. A king bed with taut crisp white bedding, hospitality-folded hospital corners and a neat row of plump white pillows, a folded bed runner and towel at the foot of the bed. Warm bedside lamps glowing softly, a large window revealing a calm dusk city view, refined muted decor, spotless and inviting."
+    },
+    {
+      "key": "hotel_corridor", "file": "hotel-corridor.jpg",
+      "prompt": "A long symmetrical luxury hotel corridor receding in deep one-point perspective, patterned carpet showing fresh parallel vacuum lines, warm wall sconces glowing evenly along both walls, a repeating row of identical dark timber guest-room doors, immaculate and empty."
+    },
+    {
+      "key": "hotel_lobby", "file": "hotel-lobby.jpg",
+      "prompt": "A refined boutique hotel lobby with a polished dark marble floor mirror-reflecting a sculptural statement chandelier overhead, plush plumped designer lounge seating in muted tones, warm ambient lighting and rich shadow, immaculate and empty, moody and elegant."
+    },
+    {
+      "key": "hotel_bathroom", "file": "hotel-bathroom.jpg",
+      "prompt": "A marble luxury hotel bathroom, spotless and gleaming: a large streak-free frameless mirror, polished chrome fixtures with crisp highlights, a precisely stacked pile of folded white towels, a walk-in shower with crystal-clear spotless glass. Warm downlighting grazing the stone, hygienic and pristine."
+    },
+    {
+      "key": "hotel_cart", "file": "hotel-cart.jpg",
+      "prompt": "A hotel housekeeping cart neatly stocked with stacks of pressed white linens, folded towels and rolled amenities, parked against the wall of an elegant warm-lit hotel corridor with patterned carpet and soft sconce light. Immaculate and orderly."
+    },
+
+    {
+      "key": "rest_dining", "file": "rest-dining.jpg",
+      "prompt": "An upscale moody restaurant dining room fully set before opening service. Rows of neatly aligned tables with pristine place settings, polished wine glasses catching warm pendant light, a dark hardwood floor with a clean satin sheen, tufted banquette seating along the wall. Empty, immaculate, inviting low light."
+    },
+    {
+      "key": "rest_bar", "file": "rest-bar.jpg",
+      "prompt": "A polished restaurant cocktail bar: a long spotless bar counter in dark stone and timber, backlit shelves of bottles glowing warmly behind it, rows of gleaming stemware hanging and neatly racked, clean brass rail and soft reflections. Empty, refined, atmospheric low light."
+    },
+    {
+      "key": "rest_afterclose", "file": "rest-afterclose.jpg",
+      "prompt": "A restaurant dining room after closing during cleaning: wooden chairs turned upside down and resting on the tabletops, a freshly mopped dark timber floor still glistening wet with soft reflections of warm lights, a professional mop bucket with a wringer positioned at the edge of the frame. Warm dim after-hours light, no people."
+    },
+    {
+      "key": "rest_boh", "file": "rest-boh.jpg",
+      "prompt": "A spotless commercial restaurant back-of-house prep area: gleaming stainless-steel counters and wall shelving wiped perfectly clean, organized empty prep stations, stainless splashbacks with crisp reflections, cool even hygienic lighting. Immaculate, no people."
+    },
+    {
+      "key": "rest_table", "file": "rest-table.jpg",
+      "prompt": "A close-up of a single guest-ready fine-dining table: a crisp pressed white linen tablecloth, precisely arranged gleaming polished cutlery, sparkling clean wine and water glasses, a neatly folded napkin, with the softly blurred warm bokeh of the dining room behind. Elegant shallow-depth-of-field detail shot."
+    },
+
+    {
+      "key": "apt_living", "file": "apt-living.jpg",
+      "prompt": "A modern European apartment living room, freshly cleaned and move-in ready. Streak-free floor-to-ceiling windows letting in bright natural daylight, a plumped neutral sofa with neatly arranged cushions, a spotless oak wood floor with a light sheen, minimal tasteful styling. Bright, airy, immaculate and empty."
+    },
+    {
+      "key": "apt_bedroom", "file": "apt-bedroom.jpg",
+      "prompt": "A fresh clean residential bedroom: a crisply made bed with smooth neutral linens and a folded throw at the foot, tidy matching nightstands with lamps, soft morning daylight through a sheer-curtained window, a spotless floor. Calm, minimal and immaculate."
+    },
+    {
+      "key": "apt_bathroom", "file": "apt-bathroom.jpg",
+      "prompt": "A clean modern residential bathroom: a limescale-free walk-in shower with spotless clear glass, polished chrome taps with bright highlights, large-format pale tiles, a neat stack of folded towels and a single small potted plant. Bright, hygienic and gleaming."
+    },
+    {
+      "key": "apt_kitchen", "file": "apt-kitchen.jpg",
+      "prompt": "A modern residential apartment kitchen, spotless and cleared: wiped empty quartz countertops, a gleaming black glass induction hob, a polished undermount sink with a clean chrome tap, streak-free handleless matte cabinet fronts. Bright daylight, immaculate and uncluttered."
+    },
+    {
+      "key": "apt_floor", "file": "apt-floor.jpg",
+      "prompt": "A close-up of freshly cleaned herringbone parquet wood flooring catching warm low sunlight with a subtle satin sheen, the clean straight edge of a soft neutral rug entering the frame, dust-free white skirting board. Detail shot emphasising spotless flooring."
+    },
+
+    {
+      "key": "kitchen_line", "file": "kitchen-line.jpg",
+      "prompt": "A professional commercial restaurant kitchen cook line after a deep clean. A row of stainless-steel ranges, cooktops and countertops polished to a mirror finish beneath a large stainless extraction hood, dramatic specular highlights and clean reflections across the spotless metal. Bright clean lighting, fully degreased, immaculate and empty."
+    },
+    {
+      "key": "kitchen_hood", "file": "kitchen-hood.jpg",
+      "prompt": "A close-up of a stainless-steel commercial kitchen extraction hood canopy with a row of clean baffle grease filters, freshly degreased to a streak-free shine, softly reflecting the kitchen lights. Detail shot, hygienic and spotless."
+    },
+    {
+      "key": "kitchen_foam", "file": "kitchen-foam.jpg",
+      "prompt": "A close-up of a stainless-steel commercial kitchen worktop and splashback during a deep clean, with thick white cleaning foam sprayed directly onto and clinging to the brushed stainless-steel surfaces, wet glistening metal showing through the foam, a professional stainless foam-sprayer canister standing on the clean counter beside it. Hygienic, reflective, no hands and no people."
+    },
+    {
+      "key": "kitchen_tiles", "file": "kitchen-tiles.jpg",
+      "prompt": "Freshly scrubbed white ceramic wall tiles meeting a clean non-slip commercial kitchen floor with a stainless drain channel, the surfaces still wet and glistening after cleaning with visible water sheen and reflections. Bright hygienic lighting, spotless."
+    },
+    {
+      "key": "kitchen_equipment", "file": "kitchen-equipment.jpg",
+      "prompt": "A professional deep-cleaning equipment still life staged on a spotless commercial kitchen floor: an industrial steam-cleaner unit, a foam-sprayer canister and a set of colour-coded scrubbing brushes arranged neatly together. A gleaming stainless kitchen behind, clean even lighting, no people."
+    },
+
+    {
+      "key": "machine_scrubber", "file": "machine-scrubber.jpg",
+      "prompt": "A walk-behind floor scrubber-drier machine standing on a vast polished terrazzo stone floor in a large bright lobby or shopping mall, a gleaming freshly-cleaned wet path visible trailing behind it and contrasting with the surrounding floor, high ceilings and architectural glazing. No operator, no people."
+    },
+    {
+      "key": "machine_rotary", "file": "machine-rotary.jpg",
+      "prompt": "A professional rotary single-disc floor-polishing machine on a hardwood parquet floor, the round buffing pad visible beneath it, one half of the wood floor showing a renewed satin sheen against the duller untreated half. Clean warm-lit interior, no people."
+    },
+    {
+      "key": "machine_industrial", "file": "machine-industrial.jpg",
+      "prompt": "A ride-on industrial floor scrubber-drier machine in a large industrial hall with a sealed polished concrete floor and high steel ceilings, one clean gleaming lane contrasting sharply against a dull dusty untreated lane, dramatic sense of scale. No driver, no people."
+    },
+    {
+      "key": "machine_tile", "file": "machine-tile.jpg",
+      "prompt": "A close-up of the cylindrical rotating brush head of a floor-cleaning machine on large-format grey ceramic tiles, a thin film of water and a crisp visible clean-edge line dividing the cleaned wet tile from the dry untreated tile. Reflective wet finish, detail shot."
+    },
+    {
+      "key": "machine_corridor", "file": "machine-corridor.jpg",
+      "prompt": "A long commercial corridor with a glossy vinyl PVC floor freshly machine-finished, deep one-point perspective with strong clean reflections of the ceiling lights on the floor, a floor-cleaning machine parked at the far end. Immaculate and empty."
+    },
+
+    {
+      "key": "office_openplan", "file": "office-openplan.jpg",
+      "prompt": "A modern open-plan office at dusk, empty after hours. Rows of neatly aligned cleared desks with straightened monitors, fresh parallel vacuum tracks in the carpet, warm interior lighting, city lights glowing through spotless floor-to-ceiling glazing. Immaculate, no people."
+    },
+    {
+      "key": "office_conference", "file": "office-conference.jpg",
+      "prompt": "A corporate conference room, immaculate: a long polished dark table mirror-reflecting recessed ceiling spotlights, a row of neatly aligned ergonomic chairs, a streak-free floor-to-ceiling glass wall with a soft city view beyond. Empty and refined, no people."
+    },
+    {
+      "key": "office_kitchenette", "file": "office-kitchenette.jpg",
+      "prompt": "A modern office breakout kitchenette, spotless: gleaming wiped countertops, a clean stainless coffee machine, neatly arranged stools at a counter, streak-free cabinet fronts and a simple bowl of fruit. Bright clean daylight, orderly, no people."
+    },
+    {
+      "key": "office_washroom", "file": "office-washroom.jpg",
+      "prompt": "A premium commercial office washroom, immaculate: a row of clean vessel basins on a stone counter, polished spotless mirrors and chrome taps with crisp highlights, warm downlighting, a dry spotless tiled floor with soft reflections. Empty and hygienic, no people."
+    },
+    {
+      "key": "office_desk", "file": "office-desk.jpg",
+      "prompt": "A close-up of a freshly sanitised office workstation: a dust-free monitor and a clean keyboard, a neatly folded microfibre cloth and an eco-friendly spray bottle resting beside them on a clean desk, soft daylight. Detail shot, no hands and no people."
+    }
+  ]
+}

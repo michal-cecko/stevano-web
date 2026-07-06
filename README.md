@@ -19,7 +19,7 @@ minimum RAM.
 | i18n           | Astro i18n routing — 5 languages: EN · SK · DE · NL · FR |
 | Styles         | One global CSS file                               |
 | Fonts          | Self-hosted woff2 (Inter + Space Grotesk subsets) |
-| Images         | Local JPGs in `public/img` (placeholder — replace)|
+| Images         | AI-generated JPGs in `public/img` (see `scripts/generate-images.mjs`) |
 | Contact form   | Zero-backend `mailto:` (upgrade path below)       |
 
 ### URLs
@@ -91,8 +91,12 @@ npm run preview    # serves dist/ locally to check the production build
 - **Text & translations:** `src/i18n/data.ts` — one entry per key, in each of the
   5 language blocks. Add a language by adding a block + listing it in
   `astro.config.mjs` and the `LOCALES` array.
-- **Photos:** replace files in `public/img` keeping the same names
-  (`hero.jpg`, `lobby.jpg`, …). Currently royalty-free placeholders.
+- **Photos:** the set in `public/img` is generated from art-direction briefs in
+  `scripts/image-briefs.json` via `node scripts/generate-images.mjs` (Google
+  Gemini — needs `GEMINI_API_KEY` in `.env`). Regenerate one image with
+  `--only <key>` (e.g. `--only hotel_room`), preview prompts with `--dry`;
+  keys map to `src/data/images.ts`. To swap a photo by hand instead, drop a
+  file into `public/img` keeping the same name.
 - **Services:** catalogue in `src/i18n/data.ts` (`STV_SERVICES` /
   `STV_SERVICE_META`); copy in the `svc.*` keys; icons in
   `src/data/serviceIcons.ts`.
@@ -125,4 +129,4 @@ handler in `src/components/pages/Home.astro`.
 
 ---
 
-Placeholder imagery and partner logos to be replaced with real assets before launch.
+Partner logos (`src/data/clients.ts`) are still placeholders to be replaced before launch.

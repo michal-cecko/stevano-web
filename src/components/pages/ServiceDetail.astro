@@ -60,7 +60,7 @@ const check = '<path d="M20 6 9 17l-5-5"></path>';
     {meta.img.map((key: string, i: number) => (
       <div class={`photo${i === 0 ? ' wide' : ''}`} data-reveal style={`--reveal-delay:${i * 90}ms`}
            data-lb data-lb-group="service-gallery" data-src={STEVANO_IMG[key]}>
-        <div class="img" style={photoStyle(key, 'soft')}></div>
+        <div class="img" style={photoStyle(key, 'none')}></div>
       </div>
     ))}
   </div>

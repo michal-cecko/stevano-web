@@ -1,17 +1,46 @@
+// Photo registry. Keys are generated from scripts/image-briefs.json by
+// scripts/generate-images.mjs — keep the two in sync when adding/removing images.
 export const STEVANO_IMG = {
-  hero:       "/img/hero.jpg",
-  lobby:      "/img/lobby.jpg",
-  room:       "/img/room.jpg",
-  corridor:   "/img/corridor.jpg",
-  restaurant: "/img/restaurant.jpg",
-  office:     "/img/office.jpg",
-  kitchen:    "/img/kitchen.jpg",
-  team:       "/img/team.jpg",
-  spray:      "/img/spray.jpg",
-  bathroom:   "/img/bathroom.jpg",
-  lounge:     "/img/lounge.jpg",
-  conference: "/img/conference.jpg",
-  airaroma:   "/img/airaroma.png"
+  hero:              "/img/hero.jpg",
+  about:             "/img/about.jpg",
+
+  hotel_room:        "/img/hotel-room.jpg",
+  hotel_corridor:    "/img/hotel-corridor.jpg",
+  hotel_lobby:       "/img/hotel-lobby.jpg",
+  hotel_bathroom:    "/img/hotel-bathroom.jpg",
+  hotel_cart:        "/img/hotel-cart.jpg",
+
+  rest_dining:       "/img/rest-dining.jpg",
+  rest_bar:          "/img/rest-bar.jpg",
+  rest_afterclose:   "/img/rest-afterclose.jpg",
+  rest_boh:          "/img/rest-boh.jpg",
+  rest_table:        "/img/rest-table.jpg",
+
+  apt_living:        "/img/apt-living.jpg",
+  apt_bedroom:       "/img/apt-bedroom.jpg",
+  apt_bathroom:      "/img/apt-bathroom.jpg",
+  apt_kitchen:       "/img/apt-kitchen.jpg",
+  apt_floor:         "/img/apt-floor.jpg",
+
+  kitchen_line:      "/img/kitchen-line.jpg",
+  kitchen_hood:      "/img/kitchen-hood.jpg",
+  kitchen_foam:      "/img/kitchen-foam.jpg",
+  kitchen_tiles:     "/img/kitchen-tiles.jpg",
+  kitchen_equipment: "/img/kitchen-equipment.jpg",
+
+  machine_scrubber:  "/img/machine-scrubber.jpg",
+  machine_rotary:    "/img/machine-rotary.jpg",
+  machine_industrial:"/img/machine-industrial.jpg",
+  machine_tile:      "/img/machine-tile.jpg",
+  machine_corridor:  "/img/machine-corridor.jpg",
+
+  office_openplan:   "/img/office-openplan.jpg",
+  office_conference: "/img/office-conference.jpg",
+  office_kitchenette:"/img/office-kitchenette.jpg",
+  office_washroom:   "/img/office-washroom.jpg",
+  office_desk:       "/img/office-desk.jpg",
+
+  airaroma:          "/img/airaroma.png"
 };
 
 // graphite tint overlaid on each photo so imagery stays on-brand (Graphite & Ice)

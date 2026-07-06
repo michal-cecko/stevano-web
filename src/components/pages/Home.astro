@@ -1,6 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { t } from '../../i18n/data';
+import { t, STV_SERVICES, STV_SERVICE_META } from '../../i18n/data';
 import { photoStyle, STEVANO_IMG } from '../../data/images';
 import { SERVICE_CARDS } from '../../data/serviceIcons';
 import ServiceCard from '../ServiceCard.astro';
@@ -8,6 +8,8 @@ import ServiceCard from '../ServiceCard.astro';
 
 const { lang } = Astro.props;
 const home = getRelativeLocaleUrl(lang, '');
+// Portfolio ("Selected work") shows every photo from all service galleries.
+const portfolioImgs = STV_SERVICES.flatMap((s) => STV_SERVICE_META[s].img);
 // const star = '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"></path>'; // Reviews hidden for now
 // const testimonials = [1, 2, 3]; // Reviews hidden for now
 ---
@@ -25,7 +27,7 @@ const home = getRelativeLocaleUrl(lang, '');
 
 <!-- ABOUT -->
 <section class="band" id="about">
-  <div class="photo" data-reveal="left"><div class="img" style={photoStyle('team', 'soft')}></div></div>
+  <div class="photo" data-reveal="left"><div class="img" style={photoStyle('about', 'soft')}></div></div>
   <div class="text" data-reveal="right">
     <p class="lbl">{t(lang, 'about.label')}</p>
     <h2>{t(lang, 'about.lead')}</h2>
@@ -75,10 +77,9 @@ const home = getRelativeLocaleUrl(lang, '');
     <h2>{t(lang, 'port.title')}</h2>
   </div>
   <div class="mosaic">
-    <div class="photo w2 h2" data-reveal style={`--reveal-delay:0ms;${photoStyle('lobby', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.lobby}></div>
-    <div class="photo" data-reveal style={`--reveal-delay:80ms;${photoStyle('restaurant', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.restaurant}></div>
-    <div class="photo" data-reveal style={`--reveal-delay:160ms;${photoStyle('office', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.office}></div>
-    <div class="photo w2" data-reveal style={`--reveal-delay:240ms;${photoStyle('corridor', 'soft')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG.corridor}></div>
+    {portfolioImgs.map((key, i) => (
+      <div class="photo" data-reveal style={`--reveal-delay:${(i % 4) * 70}ms;${photoStyle(key, 'none')}`} data-lb data-lb-group="portfolio" data-src={STEVANO_IMG[key]}></div>
+    ))}
   </div>
 </section>
 
@@ -113,7 +114,7 @@ const home = getRelativeLocaleUrl(lang, '');
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
-  <div class="img" style={photoStyle('room', 'veil')}></div>
+  <div class="img" style={photoStyle('hotel_corridor', 'veil')}></div>
   <div class="inner">
     <div data-reveal="left">
       <h2>{t(lang, 'contact.title')}</h2>

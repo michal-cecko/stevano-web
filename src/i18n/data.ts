@@ -256,12 +256,12 @@ export const I18N = {
 // Service catalogue shared by the detail page + cards (icon + gallery image keys).
 export const STV_SERVICES = ["hotel","rest","apt","kitchen","machine","office"];
 export const STV_SERVICE_META = {
-  hotel:   { key:"svc.hotel",   img:["room","corridor","lobby"] },
-  rest:    { key:"svc.rest",    img:["restaurant","kitchen","lounge"] },
-  apt:     { key:"svc.apt",     img:["room","lounge","bathroom"] },
-  kitchen: { key:"svc.kitchen", img:["kitchen","spray","bathroom"] },
-  machine: { key:"svc.machine", img:["corridor","office","lobby"], surfaces:true },
-  office:  { key:"svc.office",  img:["office","conference","lounge"] }
+  hotel:   { key:"svc.hotel",   img:["hotel_room","hotel_corridor","hotel_lobby","hotel_bathroom","hotel_cart"] },
+  rest:    { key:"svc.rest",    img:["rest_dining","rest_bar","rest_afterclose","rest_boh","rest_table"] },
+  apt:     { key:"svc.apt",     img:["apt_living","apt_bedroom","apt_bathroom","apt_kitchen","apt_floor"] },
+  kitchen: { key:"svc.kitchen", img:["kitchen_line","kitchen_hood","kitchen_foam","kitchen_tiles","kitchen_equipment"] },
+  machine: { key:"svc.machine", img:["machine_scrubber","machine_rotary","machine_industrial","machine_tile","machine_corridor"], surfaces:true },
+  office:  { key:"svc.office",  img:["office_openplan","office_conference","office_kitchenette","office_washroom","office_desk"] }
 };
 
 export const LANG_NAMES = { en:"EN", sk:"SK", de:"DE", nl:"NL", fr:"FR" };

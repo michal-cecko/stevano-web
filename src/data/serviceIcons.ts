@@ -8,12 +8,12 @@ export const SERVICE_ICONS: Record<string,string> = {
   office:  '<circle cx="8" cy="12" r="3.4"/><path d="M11.4 12H21M18 12v3M15 12v2.4"/>',
 };
 
-// home-page service cards: order + which photo each uses
+// home-page service cards: order + which photo each uses (the service's lead image)
 export const SERVICE_CARDS = [
-  { key: 'hotel',   img: 'room' },
-  { key: 'rest',    img: 'restaurant' },
-  { key: 'apt',     img: 'lounge' },
-  { key: 'kitchen', img: 'kitchen' },
-  { key: 'office',  img: 'office' },
-  { key: 'machine', img: 'corridor' },
+  { key: 'hotel',   img: 'hotel_room' },
+  { key: 'rest',    img: 'rest_dining' },
+  { key: 'apt',     img: 'apt_living' },
+  { key: 'kitchen', img: 'kitchen_line' },
+  { key: 'office',  img: 'office_openplan' },
+  { key: 'machine', img: 'machine_scrubber' },
 ];
