@@ -50,15 +50,34 @@ function loadEnvKey() {
   return null;
 }
 
+// ---- reference images -------------------------------------------------------
+const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+
+// Load reference image(s) for a brief entry (`ref` is a path, or array of paths, relative to ROOT).
+function loadRefs(ref) {
+  if (!ref) return [];
+  const paths = Array.isArray(ref) ? ref : [ref];
+  return paths.map((rel) => {
+    const p = join(ROOT, rel);
+    if (!existsSync(p)) throw new Error(`reference image not found: ${rel}`);
+    const ext = rel.split('.').pop().toLowerCase();
+    const mime = MIME[ext];
+    if (!mime) throw new Error(`unsupported reference image type: ${rel}`);
+    return { mime, data: readFileSync(p).toString('base64') };
+  });
+}
+
 // ---- API --------------------------------------------------------------------
 const API = 'https://generativelanguage.googleapis.com/v1beta/models';
 
-async function callGemini(model, prompt, aspect, key) {
+async function callGemini(model, prompt, aspect, key, refs = []) {
+  // Prepend any reference images so the model conditions on them (style / composition transfer).
+  const reqParts = [...refs.map((r) => ({ inlineData: { mimeType: r.mime, data: r.data } })), { text: prompt }];
   const res = await fetch(`${API}/${model}:generateContent`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
     body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
+      contents: [{ parts: reqParts }],
       generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: aspect } },
     }),
   });
@@ -92,12 +111,13 @@ async function callImagen(model, prompt, aspect, key) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function generate(model, prompt, aspect, key) {
+async function generate(model, prompt, aspect, key, refs = []) {
   const isImagen = model.startsWith('imagen');
+  if (isImagen && refs.length) throw new Error('reference images are only supported by the gemini image model, not imagen');
   let lastErr;
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
-      return isImagen ? await callImagen(model, prompt, aspect, key) : await callGemini(model, prompt, aspect, key);
+      return isImagen ? await callImagen(model, prompt, aspect, key) : await callGemini(model, prompt, aspect, key, refs);
     } catch (err) {
       lastErr = err;
       const retriable = /HTTP (429|5\d\d)|fetch failed|network|ECONN|timeout/i.test(err.message);
@@ -162,14 +182,15 @@ async function main() {
     const tw = im.width || d.width, th = im.height || d.height;
     const quality = im.quality || d.quality;
     const outPath = join(OUT_IMG, im.file);
-    const prompt = `${im.style || brief.style} ${im.prompt} ${brief.negative}`;
+    const prompt = `${im.style || brief.style} ${im.prompt} ${im.negative || brief.negative}`;
+    const refs = loadRefs(im.ref);
 
-    if (DRY) { console.log(`\n[${im.key}] -> ${im.file} (${model}, ${aspect}, ${tw}x${th})\n${prompt}`); continue; }
+    if (DRY) { console.log(`\n[${im.key}] -> ${im.file} (${model}, ${aspect}, ${tw}x${th})${refs.length ? ` [ref: ${Array.isArray(im.ref) ? im.ref.join(', ') : im.ref}]` : ''}\n${prompt}`); continue; }
     if (!forceThis && existsSync(outPath)) { console.log(`= skip ${im.file} (exists)`); skipped++; continue; }
 
-    process.stdout.write(`> ${im.key.padEnd(20)} ${model.replace('-generate-001', '')} ${aspect} ... `);
+    process.stdout.write(`> ${im.key.padEnd(20)} ${model.replace('-generate-001', '')} ${aspect}${refs.length ? ' +ref' : ''} ... `);
     try {
-      const buf = await generate(model, prompt, aspect, key);
+      const buf = await generate(model, prompt, aspect, key, refs);
       const rawPath = join(RAW_DIR, `${im.key}.png`);
       writeFileSync(rawPath, buf);
       postProcess(rawPath, outPath, tw, th, quality);
