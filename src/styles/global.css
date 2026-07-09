@@ -691,3 +691,48 @@ section[id]{scroll-margin-top:100px;}
   .stv-lb__next{right:calc(50% - 56px);}
   .stv-lb__img{max-height:74vh;}
 }
+
+/* Products modal — aroma diffuser range */
+.prod-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:rgba(6,8,10,.92);backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .25s ease;overflow-y:auto;}
+.prod-modal[hidden]{display:none;}
+.prod-modal[data-open="1"]{opacity:1;}
+.prod-modal__panel{position:relative;width:100%;max-width:1040px;margin:auto;
+  background:var(--surf);border:1px solid var(--bd);border-radius:10px;
+  padding:clamp(28px,4vw,52px);box-shadow:0 30px 90px rgba(0,0,0,.6);
+  transform:translateY(12px) scale(.99);transition:transform .25s ease;}
+.prod-modal[data-open="1"] .prod-modal__panel{transform:translateY(0) scale(1);}
+.prod-modal__close{position:absolute;top:16px;right:16px;display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;background:rgba(22,26,30,.7);border:1px solid var(--bd);border-radius:50%;color:var(--frost);
+  width:42px;height:42px;transition:border-color .2s,background .2s,color .2s;}
+.prod-modal__close:hover{border-color:var(--ice);color:var(--ice);background:rgba(22,26,30,.95);}
+.prod-modal__close svg{width:20px;height:20px;}
+.prod-modal__head{max-width:60ch;margin:0 0 28px;}
+.prod-modal__head .lbl{font-family:var(--head);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ice);margin:0 0 14px;}
+.prod-modal__head h2{font-family:var(--head);font-weight:500;font-size:clamp(26px,3vw,40px);letter-spacing:-.02em;line-height:1.06;margin:0 0 14px;}
+.prod-modal__lede{color:var(--mist);font-size:15px;line-height:1.7;margin:0;}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.prod-card{display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--bd);border-radius:8px;overflow:hidden;}
+.prod-card__shot{aspect-ratio:1244/938;background:var(--slate);overflow:hidden;}
+.prod-card__shot img{display:block;width:100%;height:100%;object-fit:cover;}
+.prod-card__body{display:flex;flex-direction:column;flex:1;padding:18px 20px 20px;}
+.prod-card__specs{margin:0 0 14px;}
+.prod-card__spec{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:9px 0;border-bottom:1px solid var(--bd);}
+.prod-card__spec:first-child{padding-top:0;}
+.prod-card__spec dt{font-family:var(--head);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);margin:0;}
+.prod-card__spec dd{margin:0;font-family:var(--head);font-weight:600;font-size:16px;color:var(--frost);font-variant-numeric:tabular-nums;}
+.prod-card__desc{color:var(--mist);font-size:13.5px;line-height:1.65;margin:0;}
+@media(max-width:860px){
+  .prod-grid{grid-template-columns:1fr;}
+  .prod-card{flex-direction:row;}
+  .prod-card__shot{flex:0 0 40%;aspect-ratio:auto;}
+  .prod-card__body{flex:1;justify-content:center;}
+}
+@media(max-width:520px){
+  .prod-modal{padding:12px;}
+  .prod-modal__panel{padding:24px 18px;}
+  .prod-card{flex-direction:column;}
+  .prod-card__shot{flex:none;aspect-ratio:1244/938;}
+}

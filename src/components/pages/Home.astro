@@ -10,6 +10,14 @@ const { lang } = Astro.props;
 const home = getRelativeLocaleUrl(lang, '');
 // Portfolio ("Selected work") shows every photo from all service galleries.
 const portfolioImgs = STV_SERVICES.flatMap((s) => STV_SERVICE_META[s].img);
+// Aroma diffuser range — three sizes shown in the products modal.
+// Each image is a marketing banner with the size name + capacity baked in;
+// the card adds coverage (not shown on the image) and a short blurb from i18n.
+const AROMA_PRODUCTS = [
+  { key: 'mini',   img: 'aroma_mini',   coverage: '250 m³',  contents: '250 ml' },
+  { key: 'medium', img: 'aroma_medium', coverage: '500 m³',  contents: '500 ml' },
+  { key: 'large',  img: 'aroma_large',  coverage: '1000 m³', contents: '1000 ml' },
+];
 // const star = '<path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"></path>'; // Reviews hidden for now
 // const testimonials = [1, 2, 3]; // Reviews hidden for now
 ---
@@ -58,6 +66,10 @@ const portfolioImgs = STV_SERVICES.flatMap((s) => STV_SERVICE_META[s].img);
           <span>{t(lang, 'prod.note')}</span>
         </div>
         <p class="lede">{t(lang, 'prod.body')}</p>
+        <button class="btn" type="button" data-prod-open aria-haspopup="dialog">
+          <span>{t(lang, 'prod.cta')}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
       </div>
       <div class="pvisual" data-reveal="right">
         <img class="pv-shot" src={STEVANO_IMG.airaroma} alt="Hygiene Fresh aroma diffusers" loading="lazy" />
@@ -65,6 +77,36 @@ const portfolioImgs = STV_SERVICES.flatMap((s) => STV_SERVICE_META[s].img);
     </div>
   </div>
 </section>
+
+<!-- PRODUCTS MODAL · aroma diffuser range -->
+<div class="prod-modal" data-prod-modal role="dialog" aria-modal="true" aria-labelledby="prod-modal-title" hidden>
+  <div class="prod-modal__panel" role="document">
+    <button class="prod-modal__close" type="button" aria-label={t(lang, 'prod.modal.close')} data-prod-close>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="prod-modal__head">
+      <p class="lbl">{t(lang, 'prod.label')}</p>
+      <h2 id="prod-modal-title">{t(lang, 'prod.modal.title')}</h2>
+      <p class="prod-modal__lede">{t(lang, 'prod.modal.lede')}</p>
+    </div>
+    <div class="prod-grid">
+      {AROMA_PRODUCTS.map((p) => (
+        <article class="prod-card">
+          <div class="prod-card__shot">
+            <img src={STEVANO_IMG[p.img]} alt={`Hygiene Fresh ${t(lang, `prod.${p.key}.name`)} aroma diffuser`} loading="lazy" />
+          </div>
+          <div class="prod-card__body">
+            <dl class="prod-card__specs">
+              <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.coverage')}</dt><dd>{p.coverage}</dd></div>
+              <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.volume')}</dt><dd>{p.contents}</dd></div>
+            </dl>
+            <p class="prod-card__desc">{t(lang, `prod.${p.key}.d`)}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</div>
 
 <!-- PORTFOLIO -->
 <section class="port" id="portfolio">
@@ -133,6 +175,36 @@ const portfolioImgs = STV_SERVICES.flatMap((s) => STV_SERVICE_META[s].img);
 </section>
 
 <script>
+  // Products modal — aroma diffuser range. Opened from the [data-prod-open] button.
+  const pModal = document.querySelector('[data-prod-modal]') as HTMLElement | null;
+  const pOpeners = Array.from(document.querySelectorAll<HTMLElement>('[data-prod-open]'));
+  if (pModal && pOpeners.length) {
+    const panel = pModal.querySelector('.prod-modal__panel') as HTMLElement;
+    const closeBtn = pModal.querySelector('[data-prod-close]') as HTMLElement;
+    let pLastFocus: HTMLElement | null = null;
+
+    const openModal = (trigger: HTMLElement) => {
+      pLastFocus = trigger;
+      pModal.hidden = false;
+      requestAnimationFrame(() => pModal.setAttribute('data-open', '1'));
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+    const closeModal = () => {
+      pModal.setAttribute('data-open', '0');
+      document.documentElement.style.overflow = '';
+      setTimeout(() => { pModal.hidden = true; }, 250);
+      pLastFocus?.focus();
+    };
+
+    pOpeners.forEach((b) => b.addEventListener('click', () => openModal(b)));
+    closeBtn.addEventListener('click', closeModal);
+    pModal.addEventListener('click', (e) => { if (!panel.contains(e.target as Node)) closeModal(); }); // backdrop
+    document.addEventListener('keydown', (e) => {
+      if (pModal.getAttribute('data-open') === '1' && e.key === 'Escape') closeModal();
+    });
+  }
+
   // Contact form -> /api/contact (server endpoint sends via Resend).
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {

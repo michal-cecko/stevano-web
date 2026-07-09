@@ -40,7 +40,11 @@ export const STEVANO_IMG = {
   office_washroom:   "/img/office-washroom.jpg",
   office_desk:       "/img/office-desk.jpg",
 
-  airaroma:          "/img/airaroma.png"
+  airaroma:          "/img/airaroma.png",
+
+  aroma_mini:        "/img/airaroma250ml.png",
+  aroma_medium:      "/img/air_aroma_500ml.png",
+  aroma_large:       "/img/air_aroma_1000ml.png"
 };
 
 // graphite tint overlaid on each photo so imagery stays on-brand (Graphite & Ice)
