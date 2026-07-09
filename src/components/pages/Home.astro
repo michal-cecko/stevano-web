@@ -89,21 +89,23 @@ const AROMA_PRODUCTS = [
       <h2 id="prod-modal-title">{t(lang, 'prod.modal.title')}</h2>
       <p class="prod-modal__lede">{t(lang, 'prod.modal.lede')}</p>
     </div>
-    <div class="prod-grid">
-      {AROMA_PRODUCTS.map((p) => (
-        <article class="prod-card">
-          <div class="prod-card__shot">
-            <img src={STEVANO_IMG[p.img]} alt={`Hygiene Fresh ${t(lang, `prod.${p.key}.name`)} aroma diffuser`} loading="lazy" />
-          </div>
-          <div class="prod-card__body">
-            <dl class="prod-card__specs">
-              <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.coverage')}</dt><dd>{p.coverage}</dd></div>
-              <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.volume')}</dt><dd>{p.contents}</dd></div>
-            </dl>
-            <p class="prod-card__desc">{t(lang, `prod.${p.key}.d`)}</p>
-          </div>
-        </article>
-      ))}
+    <div class="prod-modal__body">
+      <div class="prod-grid">
+        {AROMA_PRODUCTS.map((p) => (
+          <article class="prod-card">
+            <div class="prod-card__shot">
+              <img src={STEVANO_IMG[p.img]} alt={`Hygiene Fresh ${t(lang, `prod.${p.key}.name`)} aroma diffuser`} loading="lazy" />
+            </div>
+            <div class="prod-card__body">
+              <dl class="prod-card__specs">
+                <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.coverage')}</dt><dd>{p.coverage}</dd></div>
+                <div class="prod-card__spec"><dt>{t(lang, 'prod.spec.volume')}</dt><dd>{p.contents}</dd></div>
+              </dl>
+              <p class="prod-card__desc">{t(lang, `prod.${p.key}.d`)}</p>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </div>
 </div>

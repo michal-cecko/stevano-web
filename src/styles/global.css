@@ -610,8 +610,10 @@
 .stp-mk{fill:#5BA8C9;stroke:#5BA8C9;stroke-width:6;stroke-linejoin:round;stroke-linecap:round;
   stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0;
   animation:stpDraw 1.25s cubic-bezier(.45,.05,.2,1) .15s forwards, stpFill .65s ease 1.2s forwards;}
-/* wordmark fades and slides up once the mark has settled */
-.stv-pre__wm{height:clamp(26px,5.4vh,46px);width:auto;display:block;
+/* wordmark fades and slides up once the mark has settled.
+   Width-driven (with height:auto) so the wide lockup scales to fit narrow
+   viewports instead of overflowing/clipping — cap keeps it from getting huge. */
+.stv-pre__wm{width:min(440px,82vw);height:auto;display:block;
   opacity:0;transform:translateY(.5em);
   animation:stpType .7s cubic-bezier(.2,.8,.3,1) 1.55s forwards;}
 /* tagline reveals last, with a flanking rule on each side, then the whole
@@ -695,23 +697,28 @@ section[id]{scroll-margin-top:100px;}
 /* Products modal — aroma diffuser range */
 .prod-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
   padding:24px;background:rgba(6,8,10,.92);backdrop-filter:blur(6px);
-  opacity:0;transition:opacity .25s ease;overflow-y:auto;}
+  opacity:0;transition:opacity .25s ease;}
 .prod-modal[hidden]{display:none;}
 .prod-modal[data-open="1"]{opacity:1;}
-.prod-modal__panel{position:relative;width:100%;max-width:1040px;margin:auto;
+/* Panel is a flex column capped to the viewport: header stays put, only the
+   body scrolls. overflow:hidden keeps the scroll inside the rounded corners. */
+.prod-modal__panel{position:relative;width:100%;max-width:1040px;max-height:100%;
+  display:flex;flex-direction:column;overflow:hidden;
   background:var(--surf);border:1px solid var(--bd);border-radius:10px;
-  padding:clamp(28px,4vw,52px);box-shadow:0 30px 90px rgba(0,0,0,.6);
+  box-shadow:0 30px 90px rgba(0,0,0,.6);
   transform:translateY(12px) scale(.99);transition:transform .25s ease;}
 .prod-modal[data-open="1"] .prod-modal__panel{transform:translateY(0) scale(1);}
-.prod-modal__close{position:absolute;top:16px;right:16px;display:inline-flex;align-items:center;justify-content:center;
+.prod-modal__close{position:absolute;top:16px;right:16px;z-index:2;display:inline-flex;align-items:center;justify-content:center;
   cursor:pointer;background:rgba(22,26,30,.7);border:1px solid var(--bd);border-radius:50%;color:var(--frost);
   width:42px;height:42px;transition:border-color .2s,background .2s,color .2s;}
 .prod-modal__close:hover{border-color:var(--ice);color:var(--ice);background:rgba(22,26,30,.95);}
 .prod-modal__close svg{width:20px;height:20px;}
-.prod-modal__head{max-width:60ch;margin:0 0 28px;}
-.prod-modal__head .lbl{font-family:var(--head);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ice);margin:0 0 14px;}
+.prod-modal__head{flex:none;padding:clamp(28px,4vw,52px) clamp(28px,4vw,52px) 22px;border-bottom:1px solid var(--bd);}
+.prod-modal__head .lbl{font-family:var(--head);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ice);margin:0 0 14px;padding-right:48px;}
 .prod-modal__head h2{font-family:var(--head);font-weight:500;font-size:clamp(26px,3vw,40px);letter-spacing:-.02em;line-height:1.06;margin:0 0 14px;}
-.prod-modal__lede{color:var(--mist);font-size:15px;line-height:1.7;margin:0;}
+.prod-modal__lede{color:var(--mist);font-size:15px;line-height:1.7;margin:0;max-width:60ch;}
+.prod-modal__body{flex:1;min-height:0;overflow-y:auto;
+  padding:clamp(22px,3vw,32px) clamp(28px,4vw,52px) clamp(28px,4vw,52px);}
 .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .prod-card{display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--bd);border-radius:8px;overflow:hidden;}
 .prod-card__shot{aspect-ratio:1244/938;background:var(--slate);overflow:hidden;}
@@ -732,7 +739,8 @@ section[id]{scroll-margin-top:100px;}
 }
 @media(max-width:520px){
   .prod-modal{padding:12px;}
-  .prod-modal__panel{padding:24px 18px;}
+  .prod-modal__head{padding:26px 18px 18px;}
+  .prod-modal__body{padding:18px 18px 22px;}
   .prod-card{flex-direction:column;}
   .prod-card__shot{flex:none;aspect-ratio:1244/938;}
 }
