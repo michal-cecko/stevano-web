@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { LOCALES } from '../i18n/data';
+import { HREFLANG_ALTERNATES, OG_LOCALE } from '../i18n/seo';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Preloader from '../components/Preloader.astro';
@@ -9,7 +10,17 @@ import ScrollReveal from '../components/ScrollReveal.astro';
 import Lightbox from '../components/Lightbox.astro';
 
 // path = logical page path without locale prefix, e.g. '' or 'services/hotel'
-const { lang, title, description, path = '' } = Astro.props;
+// image = og:image path (default branded card); imageWidth/Height must match it;
+// type = og:type; jsonLd = structured data (object|array)
+const {
+  lang, title, description, path = '',
+  image = '/img/og.jpg', imageWidth = 4032, imageHeight = 2268,
+  type = 'website', jsonLd,
+} = Astro.props;
+
+const canonical = getAbsoluteLocaleUrl(lang, path);
+const ogImage = Astro.site ? new URL(image, Astro.site).href : image;
+const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -20,12 +31,40 @@ const { lang, title, description, path = '' } = Astro.props;
   <script is:inline>document.documentElement.classList.add('js');</script>
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0d1013" />
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
-  <link rel="canonical" href={getAbsoluteLocaleUrl(lang, path)} />
-  {LOCALES.map((l) => (
-    <link rel="alternate" hreflang={l} href={getAbsoluteLocaleUrl(l, path)} />
+  <link rel="canonical" href={canonical} />
+
+  {/* hreflang — generic language tags plus Belgium regional variants (nl-BE, fr-BE) */}
+  {HREFLANG_ALTERNATES.map((a) => (
+    <link rel="alternate" hreflang={a.hreflang} href={getAbsoluteLocaleUrl(a.locale, path)} />
   ))}
   <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('en', path)} />
+
+  {/* Open Graph */}
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content="STEVANO" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content={String(imageWidth)} />
+  <meta property="og:image:height" content={String(imageHeight)} />
+  <meta property="og:locale" content={OG_LOCALE[lang]} />
+  {LOCALES.filter((l) => l !== lang).map((l) => (
+    <meta property="og:locale:alternate" content={OG_LOCALE[l]} />
+  ))}
+
+  {/* Twitter Card */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  {jsonLdBlocks.map((block) => (
+    <script type="application/ld+json" set:html={JSON.stringify(block)} />
+  ))}
 </head>
 <body>
   <Preloader />

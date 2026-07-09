@@ -2,11 +2,18 @@
 import Base from '../../layouts/Base.astro';
 import Home from '../../components/pages/Home.astro';
 import { t } from '../../i18n/data';
+import { SEO_HOME_TITLE, buildLocalBusinessJsonLd } from '../../i18n/seo';
 export function getStaticPaths() {
   return ['sk', 'de', 'nl', 'fr'].map((lang) => ({ params: { lang } }));
 }
 const { lang } = Astro.params;
 ---
-<Base lang={lang} title="STEVANO — Premium Commercial Cleaning" description={t(lang, 'hero.lede')} path="">
+<Base
+  lang={lang}
+  title={SEO_HOME_TITLE[lang]}
+  description={t(lang, 'hero.lede')}
+  path=""
+  jsonLd={buildLocalBusinessJsonLd(lang, Astro.site)}
+>
   <Home lang={lang} />
 </Base>

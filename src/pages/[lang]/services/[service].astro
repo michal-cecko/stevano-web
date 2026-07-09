@@ -2,6 +2,8 @@
 import Base from '../../../layouts/Base.astro';
 import ServiceDetail from '../../../components/pages/ServiceDetail.astro';
 import { t, STV_SERVICES, STV_SERVICE_META } from '../../../i18n/data';
+import { STEVANO_IMG } from '../../../data/images';
+import { buildServiceJsonLd, buildBreadcrumbJsonLd } from '../../../i18n/seo';
 export function getStaticPaths() {
   const langs = ['sk', 'de', 'nl', 'fr'];
   return langs.flatMap((lang) => STV_SERVICES.map((service) => ({ params: { lang, service } })));
@@ -9,6 +11,15 @@ export function getStaticPaths() {
 const { lang, service } = Astro.params;
 const meta = STV_SERVICE_META[service];
 ---
-<Base lang={lang} title={`${t(lang, meta.key)} — STEVANO`} description={t(lang, meta.key + '.d')} path={`services/${service}`}>
+<Base
+  lang={lang}
+  title={`${t(lang, meta.key)} — STEVANO`}
+  description={t(lang, meta.key + '.d')}
+  path={`services/${service}`}
+  image={STEVANO_IMG[meta.img[0]]}
+  imageWidth={1200}
+  imageHeight={800}
+  jsonLd={[buildServiceJsonLd(lang, service, Astro.site), buildBreadcrumbJsonLd(lang, service)]}
+>
   <ServiceDetail lang={lang} service={service} />
 </Base>
