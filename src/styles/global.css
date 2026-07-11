@@ -308,6 +308,19 @@
 /* over-photo variant (Immersive nav) */
 .stv-logo--onphoto .stv-logo__img{filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));}
 
+/* Operating-region tag — flat electric-blue (logo-family) label, native to the
+   site's uppercase/letter-spaced idiom. Lives in the header (desktop) and footer.
+   No glow, no pulse, static dot — quiet and non-distracting. */
+.stv-region-tag{display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+  font-family:var(--head); font-weight:600; font-size:11.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:#43C7FF;}
+.stv-region-tag__dot{width:6px; height:6px; border-radius:50%; flex:none; background:#43C7FF;}
+/* header variant sits over the hero alongside the nav — match its shadow for legibility */
+.nav-right > .stv-region-tag{text-shadow:0 1px 6px rgba(0,0,0,.4);}
+/* hide in the header on narrower screens so it never crowds nav / lang / burger;
+   the footer keeps the message at every width */
+@media(max-width:1080px){ .nav-right > .stv-region-tag{display:none;} }
+
 
 
   :root{
@@ -408,7 +421,8 @@
   .partner .ptop{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;}
   .partner .lbl{font-family:var(--head);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ice);margin:0 0 16px;}
   .partner h2{font-family:var(--head);font-weight:500;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em;line-height:1.05;margin:0 0 22px;}
-  .partner .lede{color:var(--mist);font-size:16px;line-height:1.8;max-width:52ch;margin:0 0 28px;}
+  .partner .lede{color:var(--mist);font-size:16px;line-height:1.8;max-width:52ch;margin:0 0 22px;}
+  .partner .pconsult{display:flex;align-items:flex-start;gap:11px;max-width:52ch;margin:0 0 28px;padding-left:14px;border-left:2px solid var(--ice);color:var(--frost);font-size:15px;line-height:1.6;}
   .partner .btn{display:inline-flex;align-items:center;gap:9px;}
   .partner .btn svg{width:16px;height:16px;transition:transform .2s;}
   .partner .btn:hover svg{transform:translateX(3px);}
@@ -456,7 +470,8 @@
   .form-status[data-ok="1"]{color:var(--ice);}
   .form-status[data-ok="0"]{color:#e0716f;}
 
-  footer{padding:40px max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));color:var(--mist);font-size:13px;border-top:1px solid var(--bd);}
+  footer{padding:40px max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));color:var(--mist);font-size:13px;border-top:1px solid var(--bd);
+    display:flex;align-items:center;justify-content:space-between;gap:16px 28px;flex-wrap:wrap;}
 
   @media(max-width:900px){
     .band{grid-template-columns:1fr;}

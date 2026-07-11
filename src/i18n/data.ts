@@ -36,6 +36,7 @@ export const I18N = {
     "prod.note":"Offered as an add-on service for STEVANO cleaning-contract clients.",
     "prod.body":"Rent professional aroma diffusers from our partner Hygiene Fresh — installed, filled and serviced by our team. Waterless cold-air diffusion carries a consistent, welcoming fragrance through lobbies, washrooms and common areas, with nothing to buy or maintain.",
     "prod.cta":"View the range",
+    "prod.consult":"Book a site visit and we'll advise you on the right choice for your space.",
     "prod.modal.title":"Air Aroma Diffusers","prod.modal.lede":"Waterless cold-air diffusers in three sizes — matched to the volume of the space. Installed, filled and serviced by our team.",
     "prod.spec.coverage":"Coverage","prod.spec.capacity":"Refill capacity","prod.spec.volume":"Total contents","prod.modal.close":"Close",
     "prod.mini.name":"Mini","prod.mini.d":"Compact, wall-mountable unit with LCD display and adjustable timer — ideal for washrooms and small rooms.",
@@ -91,6 +92,7 @@ export const I18N = {
     "prod.note":"Ponúkané ako doplnková služba pre klientov STEVANO s upratovacou zmluvou.",
     "prod.body":"Prenajmite si profesionálne aróma difuzéry od nášho partnera Hygiene Fresh — inštaláciu, plnenie aj servis zabezpečí náš tím. Bezvodá studená difúzia šíri konzistentnú, príjemnú vôňu do vstupných hál, toaliet a spoločných priestorov — bez potreby čokoľvek kupovať alebo udržiavať.",
     "prod.cta":"Pozrieť ponuku",
+    "prod.consult":"Dohodnite si obhliadku a poradíme vám so správnym výberom pre váš priestor.",
     "prod.modal.title":"Aróma difuzéry","prod.modal.lede":"Bezvodé studené difuzéry v troch veľkostiach — podľa objemu priestoru. Inštaláciu, plnenie aj servis zabezpečí náš tím.",
     "prod.spec.coverage":"Pokrytie","prod.spec.capacity":"Kapacita náplne","prod.spec.volume":"Objem","prod.modal.close":"Zavrieť",
     "prod.mini.name":"Mini","prod.mini.d":"Kompaktná jednotka na stenu s LCD displejom a nastaviteľným časovačom — ideálna pre toalety a malé miestnosti.",
@@ -146,6 +148,7 @@ export const I18N = {
     "prod.note":"Als Zusatzleistung für STEVANO-Kunden mit Reinigungsvertrag.",
     "prod.body":"Mieten Sie professionelle Aroma-Diffusoren von unserem Partner Hygiene Fresh — Installation, Befüllung und Wartung übernimmt unser Team. Die wasserlose Kaltluft-Diffusion trägt einen gleichbleibenden, einladenden Duft durch Lobbys, Waschräume und Gemeinschaftsbereiche — ohne Kauf und ohne Wartungsaufwand.",
     "prod.cta":"Sortiment ansehen",
+    "prod.consult":"Vereinbaren Sie eine Besichtigung – wir beraten Sie zur richtigen Wahl für Ihren Raum.",
     "prod.modal.title":"Aroma-Diffusoren","prod.modal.lede":"Wasserlose Kaltluft-Diffusoren in drei Größen — passend zum Raumvolumen. Installation, Befüllung und Wartung durch unser Team.",
     "prod.spec.coverage":"Abdeckung","prod.spec.capacity":"Füllmenge","prod.spec.volume":"Gesamtinhalt","prod.modal.close":"Schließen",
     "prod.mini.name":"Mini","prod.mini.d":"Kompaktes, wandmontierbares Gerät mit LCD-Display und einstellbarem Timer — ideal für Waschräume und kleine Räume.",
@@ -201,6 +204,7 @@ export const I18N = {
     "prod.note":"Aangeboden als aanvullende dienst voor STEVANO-klanten met een schoonmaakcontract.",
     "prod.body":"Huur professionele aromadiffusers van onze partner Hygiene Fresh — geïnstalleerd, gevuld en onderhouden door ons team. Waterloze koudeluchtdiffusie verspreidt een consistente, gastvrije geur door lobby's, sanitair en gemeenschappelijke ruimten, zonder iets te kopen of te onderhouden.",
     "prod.cta":"Bekijk het assortiment",
+    "prod.consult":"Maak een afspraak voor een bezichtiging en wij adviseren u over de juiste keuze voor uw ruimte.",
     "prod.modal.title":"Aroma-diffusers","prod.modal.lede":"Waterloze koudeluchtdiffusers in drie maten — afgestemd op het volume van de ruimte. Geïnstalleerd, gevuld en onderhouden door ons team.",
     "prod.spec.coverage":"Dekking","prod.spec.capacity":"Vulcapaciteit","prod.spec.volume":"Totale inhoud","prod.modal.close":"Sluiten",
     "prod.mini.name":"Mini","prod.mini.d":"Compact, wandmonteerbaar toestel met LCD-display en instelbare timer — ideaal voor sanitair en kleine ruimtes.",
@@ -256,6 +260,7 @@ export const I18N = {
     "prod.note":"Proposé en option pour les clients STEVANO sous contrat de nettoyage.",
     "prod.body":"Louez des diffuseurs d'arôme professionnels auprès de notre partenaire Hygiene Fresh — installés, remplis et entretenus par notre équipe. La diffusion à air froid sans eau porte un parfum constant et accueillant dans les halls, sanitaires et espaces communs, sans rien acheter ni entretenir.",
     "prod.cta":"Voir la gamme",
+    "prod.consult":"Prenez rendez-vous pour une visite et nous vous conseillerons sur le bon choix pour votre espace.",
     "prod.modal.title":"Diffuseurs d'arôme","prod.modal.lede":"Diffuseurs à air froid sans eau en trois tailles — adaptés au volume de l'espace. Installés, remplis et entretenus par notre équipe.",
     "prod.spec.coverage":"Couverture","prod.spec.capacity":"Capacité de recharge","prod.spec.volume":"Contenu total","prod.modal.close":"Fermer",
     "prod.mini.name":"Mini","prod.mini.d":"Appareil compact et mural avec écran LCD et minuterie réglable — idéal pour les sanitaires et petites pièces.",
@@ -294,6 +299,10 @@ export const LANG_FULL  = { en:"English", sk:"Slovenčina", de:"Deutsch", nl:"Ne
 
 export const LOCALES = ['en','sk','de','nl','fr'];
 export const DEFAULT_LOCALE = 'en';
+
+// Operating-region tag — shown in the header (desktop) and footer. Kept out of the
+// translated tables on purpose: the client wants this exact English phrase everywhere.
+export const REGION_TAG = 'OPERATING IN WEST FLANDERS';
 export function t(lang, key){
   const dict = I18N[lang] || I18N.en;
   return dict[key] != null ? dict[key] : (I18N.en[key] ?? key);

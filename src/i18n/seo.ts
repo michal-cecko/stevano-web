@@ -38,7 +38,7 @@ export const OG_LOCALE: Record<string, string> = {
 // Static business facts (mirrors the contact section in Home.astro).
 const BUSINESS = {
   name: 'STEVANO s.r.o.',
-  telephone: '+421905368960',
+  telephone: '+32467884458',
   email: 'infostevano@gmail.eu',
   street: 'Dolné Rudiny 2956/8',
   city: 'Žilina',
