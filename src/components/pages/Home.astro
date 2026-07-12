@@ -26,7 +26,7 @@ const AROMA_PRODUCTS = [
   <div class="img" style={photoStyle('hero', 'none')}></div>
   <div class="scrim"></div>
   <div class="inner">
-    <p class="kick" data-reveal style="--reveal-delay:0ms">{t(lang, 'hero.kick')}</p>
+    <p class="kick" data-reveal style="--reveal-delay:0ms">{t(lang, 'hero.kick')}<span class="kick-region">{t(lang, 'region.tag')}</span></p>
     <h1 data-reveal style="--reveal-delay:90ms"><span>{t(lang, 'hero.t1')}</span> <span>{t(lang, 'hero.t2')}</span></h1>
     <p data-reveal style="--reveal-delay:180ms">{t(lang, 'hero.lede')}</p>
     <a href={`${home}#contact`} class="btn" data-reveal style="--reveal-delay:270ms">{t(lang, 'cta.contact')}</a>
@@ -162,7 +162,8 @@ const AROMA_PRODUCTS = [
       <div class="cinfo">
         <div><div class="l">{t(lang, 'contact.email')}</div><div class="v"><a href="mailto:infostevano@gmail.eu">infostevano@gmail.eu</a><br><a href="mailto:stevano.sro@icloud.com">stevano.sro@icloud.com</a></div></div>
         <div><div class="l">{t(lang, 'contact.phone')}</div><div class="v"><a href="tel:+32467884458">+32 467 88 44 58</a></div></div>
-        <div><div class="l">{t(lang, 'contact.address')}</div><div class="v">Dolné Rudiny 2956/8, Žilina</div></div>
+        <div><div class="l">{t(lang, 'contact.address')}</div><div class="v">Dolné Rudiny 2956/8, Žilina, SK</div></div>
+        <div><div class="l">{t(lang, 'contact.region')}</div><div class="v">West Flanders, BE</div></div>
       </div>
     </div>
     <form id="contact-form" data-reveal="right">

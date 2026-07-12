@@ -308,18 +308,16 @@
 /* over-photo variant (Immersive nav) */
 .stv-logo--onphoto .stv-logo__img{filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));}
 
-/* Operating-region tag — flat electric-blue (logo-family) label, native to the
-   site's uppercase/letter-spaced idiom. Lives in the header (desktop) and footer.
-   No glow, no pulse, static dot — quiet and non-distracting. */
-.stv-region-tag{display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
-  font-family:var(--head); font-weight:600; font-size:11.5px; letter-spacing:.15em;
-  text-transform:uppercase; color:#43C7FF;}
-.stv-region-tag__dot{width:6px; height:6px; border-radius:50%; flex:none; background:#43C7FF;}
-/* header variant sits over the hero alongside the nav — match its shadow for legibility */
-.nav-right > .stv-region-tag{text-shadow:0 1px 6px rgba(0,0,0,.4);}
-/* hide in the header on narrower screens so it never crowds nav / lang / burger;
-   the footer keeps the message at every width */
-@media(max-width:1080px){ .nav-right > .stv-region-tag{display:none;} }
+/* hero region line — the operating-region message. Inherits the kick's
+   font/color/spacing so it reads as part of the same label. Inline on desktop
+   (separated by a middot, matching the kick idiom), on its own line on mobile. */
+.hero .kick .kick-region{display:inline;}
+.hero .kick .kick-region::before{content:"·"; margin:0 .5em;}
+@media(max-width:1080px){
+  .hero .kick{white-space:normal;}
+  .hero .kick .kick-region{display:block; margin-top:8px;}
+  .hero .kick .kick-region::before{content:none;}
+}
 
 
 
@@ -368,7 +366,7 @@
       linear-gradient(to top, rgba(8,10,12,.92) 0%, rgba(8,10,12,.6) 34%, rgba(8,10,12,.18) 64%, rgba(8,10,12,.5) 100%),
       linear-gradient(to right, rgba(8,10,12,.62), rgba(8,10,12,.12) 58%, transparent 80%);}
   .hero .inner{position:relative;z-index:2;width:100%;max-width:var(--container);margin-inline:auto;padding:0 var(--gutter) 70px;}
-  .hero .kick{font-family:var(--head);font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--ice);margin:0 0 20px;text-shadow:0 1px 10px rgba(0,0,0,.55);}
+  .hero .kick{font-family:var(--head);font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--ice);margin:0 0 20px;text-shadow:0 1px 10px rgba(0,0,0,.55);white-space:nowrap;}
   .hero h1{font-family:var(--head);font-weight:600;font-size:clamp(46px,8vw,118px);line-height:.92;letter-spacing:-.03em;margin:0 0 26px;}
   .hero p{font-size:18px;color:#cfd6da;max-width:50ch;margin:0 0 30px;line-height:1.65;}
   .btn{display:inline-block;background:var(--ice);color:var(--slate);font-family:var(--head);font-weight:600;font-size:14px;

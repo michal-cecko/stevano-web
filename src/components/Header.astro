@@ -1,6 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { t, REGION_TAG } from '../i18n/data';
+import { t } from '../i18n/data';
 import Logo from './Logo.astro';
 import LangSwitcher from './LangSwitcher.astro';
 
@@ -19,9 +19,6 @@ const links = [
     <nav class="nlinks">
       {links.map((l) => <a href={l.href}>{t(lang, l.key)}</a>)}
     </nav>
-    <span class="stv-region-tag" aria-label={REGION_TAG}>
-      <span class="stv-region-tag__dot" aria-hidden="true"></span>{REGION_TAG}
-    </span>
     <LangSwitcher lang={lang} path={path} />
     <button type="button" class="stv-burger" aria-label="Menu" aria-expanded="false">
       <span class="bars"><span></span><span></span><span></span></span>

@@ -52,9 +52,10 @@ export const I18N = {
     "fb.3.a":"Sofie Vermeulen","fb.3.r":"Facilities Director, Aurora Hospitality",
     "clients.label":"Trusted by",
     "sd.eyebrow":"Service","sd.back":"All services","sd.included":"What you get","sd.gallery":"Gallery","sd.cta":"Discuss this service","sd.surfaces":"Surfaces we treat",
-    "contact.title":"Let's talk.","contact.email":"Email","contact.phone":"Phone","contact.address":"Address",
+    "contact.title":"Let's talk.","contact.email":"Email","contact.phone":"Phone","contact.address":"Address","contact.region":"Region",
     "cta.contact":"Get in Touch",
     "form.name":"Name","form.email":"Email","form.message":"Message","form.submit":"Send Message",
+    "region.tag":"OPERATING IN WEST FLANDERS",
     "footer":"© 2026 STEVANO s.r.o. — Premium commercial cleaning solutions."
   },
   sk: {
@@ -108,9 +109,10 @@ export const I18N = {
     "fb.3.a":"Sofie Vermeulen","fb.3.r":"Riaditeľka prevádzky, Aurora Hospitality",
     "clients.label":"Dôverujú nám",
     "sd.eyebrow":"Služba","sd.back":"Všetky služby","sd.included":"Čo získate","sd.gallery":"Galéria","sd.cta":"Prediskutovať túto službu","sd.surfaces":"Povrchy, ktoré ošetrujeme",
-    "contact.title":"Ozvite sa.","contact.email":"Email","contact.phone":"Telefón","contact.address":"Adresa",
+    "contact.title":"Ozvite sa.","contact.email":"Email","contact.phone":"Telefón","contact.address":"Adresa","contact.region":"Región",
     "cta.contact":"Kontaktujte nás",
     "form.name":"Meno","form.email":"Email","form.message":"Správa","form.submit":"Odoslať správu",
+    "region.tag":"PÔSOBÍME V ZÁPADNOM FLÁNDERSKU",
     "footer":"© 2026 STEVANO s.r.o. — Prémiové komerčné upratovacie riešenia."
   },
   de: {
@@ -146,7 +148,7 @@ export const I18N = {
     "ap.4":"Flexible Planung rund um Ihren Betrieb",
     "prod.label":"Aroma & Luftpflege","prod.title":"Signatur-Duft","prod.title2":"für jeden Raum.",
     "prod.note":"Als Zusatzleistung für STEVANO-Kunden mit Reinigungsvertrag.",
-    "prod.body":"Mieten Sie professionelle Aroma-Diffusoren von unserem Partner Hygiene Fresh — Installation, Befüllung und Wartung übernimmt unser Team. Die wasserlose Kaltluft-Diffusion trägt einen gleichbleibenden, einladenden Duft durch Lobbys, Waschräume und Gemeinschaftsbereiche — ohne Kauf und ohne Wartungsaufwand.",
+    "prod.body":"Mieten Sie professionelle Aroma-Diffusoren von unserem Partner Hygiene Fresh — Installationfüllung und Wartung übernimmt unser Team. Die wasserlose Kaltluft-Diffusion trägt einen gleichbleibenden, einladenden Duft durch Lobbys, Waschräume und Gemeinschaftsbereiche — ohne Kauf und ohne Wartungsaufwand.",
     "prod.cta":"Sortiment ansehen",
     "prod.consult":"Vereinbaren Sie eine Besichtigung – wir beraten Sie zur richtigen Wahl für Ihren Raum.",
     "prod.modal.title":"Aroma-Diffusoren","prod.modal.lede":"Wasserlose Kaltluft-Diffusoren in drei Größen — passend zum Raumvolumen. Installation, Befüllung und Wartung durch unser Team.",
@@ -164,9 +166,10 @@ export const I18N = {
     "fb.3.a":"Sofie Vermeulen","fb.3.r":"Facility-Leiterin, Aurora Hospitality",
     "clients.label":"Vertraut von",
     "sd.eyebrow":"Leistung","sd.back":"Alle Leistungen","sd.included":"Das bekommen Sie","sd.gallery":"Galerie","sd.cta":"Diese Leistung besprechen","sd.surfaces":"Oberflächen, die wir behandeln",
-    "contact.title":"Sprechen wir.","contact.email":"Email","contact.phone":"Telefon","contact.address":"Adresse",
+    "contact.title":"Sprechen wir.","contact.email":"Email","contact.phone":"Telefon","contact.address":"Adresse","contact.region":"Region",
     "cta.contact":"Kontakt aufnehmen",
     "form.name":"Name","form.email":"Email","form.message":"Nachricht","form.submit":"Nachricht senden",
+    "region.tag":"TÄTIG IN WESTFLANDERN",
     "footer":"© 2026 STEVANO s.r.o. — Premium-Gewerbereinigungslösungen."
   },
   nl: {
@@ -220,9 +223,10 @@ export const I18N = {
     "fb.3.a":"Sofie Vermeulen","fb.3.r":"Facilitair directeur, Aurora Hospitality",
     "clients.label":"Vertrouwd door",
     "sd.eyebrow":"Dienst","sd.back":"Alle diensten","sd.included":"Wat u krijgt","sd.gallery":"Galerij","sd.cta":"Bespreek deze dienst","sd.surfaces":"Oppervlakken die we behandelen",
-    "contact.title":"Laten we praten.","contact.email":"E-mail","contact.phone":"Telefoon","contact.address":"Adres",
+    "contact.title":"Laten we praten.","contact.email":"E-mail","contact.phone":"Telefoon","contact.address":"Adres","contact.region":"Regio",
     "cta.contact":"Neem contact op",
     "form.name":"Naam","form.email":"E-mail","form.message":"Bericht","form.submit":"Bericht verzenden",
+    "region.tag":"ACTIEF IN WEST-VLAANDEREN",
     "footer":"© 2026 STEVANO s.r.o. — Premium commerciële schoonmaakoplossingen."
   },
   fr: {
@@ -276,9 +280,10 @@ export const I18N = {
     "fb.3.a":"Sofie Vermeulen","fb.3.r":"Directrice des installations, Aurora Hospitality",
     "clients.label":"Ils nous font confiance",
     "sd.eyebrow":"Service","sd.back":"Tous les services","sd.included":"Ce que vous obtenez","sd.gallery":"Galerie","sd.cta":"Discuter de ce service","sd.surfaces":"Surfaces que nous traitons",
-    "contact.title":"Parlons-en.","contact.email":"Email","contact.phone":"Téléphone","contact.address":"Adresse",
+    "contact.title":"Parlons-en.","contact.email":"Email","contact.phone":"Téléphone","contact.address":"Adresse","contact.region":"Région",
     "cta.contact":"Nous contacter",
     "form.name":"Nom","form.email":"Email","form.message":"Message","form.submit":"Envoyer",
+    "region.tag":"ACTIFS EN FLANDRE-OCCIDENTALE",
     "footer":"© 2026 STEVANO s.r.o. — Solutions de nettoyage commercial haut de gamme."
   }
 };
@@ -300,9 +305,8 @@ export const LANG_FULL  = { en:"English", sk:"Slovenčina", de:"Deutsch", nl:"Ne
 export const LOCALES = ['en','sk','de','nl','fr'];
 export const DEFAULT_LOCALE = 'en';
 
-// Operating-region tag — shown in the header (desktop) and footer. Kept out of the
-// translated tables on purpose: the client wants this exact English phrase everywhere.
-export const REGION_TAG = 'OPERATING IN WEST FLANDERS';
+// Operating-region tag — shown in the header (desktop), footer and hero. Translated
+// per locale under the "region.tag" key; use t(lang, 'region.tag') to read it.
 export function t(lang, key){
   const dict = I18N[lang] || I18N.en;
   return dict[key] != null ? dict[key] : (I18N.en[key] ?? key);
