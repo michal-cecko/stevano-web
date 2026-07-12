@@ -144,6 +144,30 @@
     {
       "key": "office_desk", "file": "office-desk.jpg",
       "prompt": "A close-up of a freshly sanitised office workstation: a dust-free monitor and a clean keyboard, a neatly folded microfibre cloth and an eco-friendly spray bottle resting beside them on a clean desk, soft daylight. Detail shot, no hands and no people."
+    },
+    {
+      "key": "aroma_mini", "file": "aroma-led-regular.jpg",
+      "aspect": "4:3", "width": 1244, "height": 938, "quality": 88,
+      "ref": "scripts/refs/hf-led-regular.png",
+      "style": "Premium product-catalogue photograph, photorealistic, shot on a full-frame camera with a macro lens, soft even diffused studio lighting, cool neutral palette of pale slate grey, white stone and brushed steel, gentle soft reflection under the device, shallow clean background, crisp and minimal.",
+      "negative": "No overlay text, no captions, no marketing typography, no watermarks, no green foliage or plants, no wood or timber surface, no outdoor scene, no second device, no people, no hands. Avoid a CGI or 3D-render look, avoid oversaturation, avoid clutter.",
+      "prompt": "A single glossy black Hygiene Fresh LED Regular automatic aerosol air-freshener dispenser: a tall, slim, rounded-rectangular wall-mount unit with a small sensor window near the top and a discreet spray outlet, standing upright and centred on a pale cool-grey stone surface. Soft studio light, a faint reflection beneath it, a clean blurred light-grey neutral background. Sharp product-hero focus on the device, premium and minimal."
+    },
+    {
+      "key": "aroma_medium", "file": "aroma-medium.jpg",
+      "aspect": "4:3", "width": 1244, "height": 938, "quality": 88,
+      "ref": "scripts/refs/hf-central-medium.png",
+      "style": "Premium product-catalogue photograph, photorealistic, shot on a full-frame camera with a macro lens, soft even diffused studio lighting, cool neutral palette of pale slate grey, white stone and brushed steel, gentle soft reflection under the devices, shallow clean background, crisp and minimal.",
+      "negative": "No overlay text, no captions, no marketing typography, no watermarks, no green foliage, no dried flowers, no plants, no wood or timber surface, no warm beige or terracotta tones, no outdoor scene, no people, no hands. Avoid a CGI or 3D-render look, avoid oversaturation, avoid clutter.",
+      "prompt": "A matte black Hygiene Fresh cold-air aroma diffuser unit — a compact rounded-rectangular box with a small LCD panel and four control buttons on its face — standing beside its matching black cylindrical diffuser-refill bottle, a thin wisp of fine white mist rising from the top of the unit. Both are centred on a pale cool-grey stone surface with a soft reflection beneath them and a clean blurred light-grey neutral background. Sharp product-hero focus, premium and minimal."
+    },
+    {
+      "key": "aroma_large", "file": "aroma-large.jpg",
+      "aspect": "4:3", "width": 1244, "height": 938, "quality": 88,
+      "ref": "scripts/refs/hf-central-large.png",
+      "style": "Premium product-catalogue photograph, photorealistic, shot on a full-frame camera with a macro lens, soft even diffused studio lighting, cool neutral palette of pale slate grey, white stone and brushed steel, gentle soft reflection under the devices, shallow clean background, crisp and minimal.",
+      "negative": "No overlay text, no captions, no marketing typography, no watermarks, no green foliage, no dried flowers, no plants, no wood or timber surface, no warm beige or terracotta tones, no outdoor scene, no people, no hands. Avoid a CGI or 3D-render look, avoid oversaturation, avoid clutter.",
+      "prompt": "A large matte black Hygiene Fresh cold-air aroma diffuser unit — a tall rounded-rectangular commercial box with a small LCD panel and four control buttons on its face — standing beside its matching black cylindrical diffuser-refill bottle, a thin wisp of fine white mist rising from the top of the unit. Both are centred on a pale cool-grey stone surface with a soft reflection beneath them and a clean blurred light-grey neutral background. Sharp product-hero focus, premium and minimal."
     }
   ]
 }

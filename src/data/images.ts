@@ -42,9 +42,9 @@ export const STEVANO_IMG = {
 
   airaroma:          "/img/airaroma.png",
 
-  aroma_mini:        "/img/airaroma250ml.png",
-  aroma_medium:      "/img/air_aroma_500ml.png",
-  aroma_large:       "/img/air_aroma_1000ml.png",
+  aroma_mini:        "/img/aroma-led-regular.jpg",
+  aroma_medium:      "/img/aroma-medium.jpg",
+  aroma_large:       "/img/aroma-large.jpg",
 
   og:                "/img/og.jpg"        // branded social-share card (1.91:1)
 };
