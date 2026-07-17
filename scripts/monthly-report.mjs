@@ -4,10 +4,13 @@
 // Google Search Console, formats a plain-text summary and emails it via Resend.
 // Runs unattended from .github/workflows/monthly-report.yml; also runnable by hand.
 //
+// The report itself is in Slovak — it goes to the client, not to us.
+//
 // Usage:
 //   node scripts/monthly-report.mjs              report on the previous calendar month
 //   node scripts/monthly-report.mjs --month 2026-06   report on a specific month
 //   node scripts/monthly-report.mjs --dry        print the report, send no email
+//   node scripts/monthly-report.mjs --dry --html also write report-preview.html to eyeball the layout
 //
 // Requires (from the environment or the project .env file):
 //   GOOGLE_SERVICE_ACCOUNT_KEY  service-account JSON key, base64-encoded
@@ -17,7 +20,7 @@
 //   REPORT_TO                   recipient(s), comma-separated
 //   REPORT_FROM                 optional sender; falls back to CONTACT_FROM, then resend.dev
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { JWT } from 'google-auth-library';
@@ -84,25 +87,81 @@ function monthRange(ym) {
   return {
     startDate: iso(first),
     endDate: iso(last),
-    label: first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
+    label: first.toLocaleDateString('sk-SK', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
   };
 }
 
 const { startDate, endDate, label } = monthRange(month);
 
 // ---- formatting -------------------------------------------------------------
-const num = (v) => Number(v || 0).toLocaleString('en-GB');
-const pct = (v) => `${(Number(v || 0) * 100).toFixed(1)}%`;
-const dec = (v) => Number(v || 0).toFixed(1);
+// The report goes to the client, who is Slovak and not technical: every metric
+// is labelled in Slovak and carries a one-line plain-language explanation.
+const num = (v) => Number(v || 0).toLocaleString('sk-SK');
+const pct = (v) => `${(Number(v || 0) * 100).toLocaleString('sk-SK', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %`;
+const dec = (v) => Number(v || 0).toLocaleString('sk-SK', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-// Fixed-width list: "  1. /some/path          123 views"
-function list(rows, unit) {
-  if (!rows.length) return ['   (no data)'];
+// Brand palette — Graphite & Ice, matching the site.
+const INK = '#0d1013', ICE = '#5BA8C9', BODY = '#14171A', MUTED = '#6b7280', LINE = '#e5e7eb';
+
+const T = {
+  sessions:    ['Návštevy', 'Koľkokrát niekto prišiel na web. Jedna návšteva môže zahŕňať viac stránok.'],
+  users:       ['Návštevníci', 'Počet skutočných ľudí. Ak sa ten istý človek vráti viackrát, počíta sa raz.'],
+  views:       ['Zobrazenia stránok', 'Koľko stránok si návštevníci spolu pozreli.'],
+  clicks:      ['Kliknutia', 'Koľkokrát niekto klikol na web priamo vo výsledkoch vyhľadávania Google.'],
+  impressions: ['Zobrazenia vo vyhľadávaní', 'Koľkokrát sa web ukázal vo výsledkoch Google — aj keď naň nikto neklikol.'],
+  ctr:         ['Miera prekliku (CTR)', 'Podiel zobrazení, ktoré viedli ku kliknutiu. Vyššie číslo = lákavejší popis vo vyhľadávaní.'],
+  position:    ['Priemerná pozícia', 'Priemerné poradie vo výsledkoch Google. Nižšie číslo je lepšie (1 = úplne hore).'],
+};
+
+// ---- plain-text part (fallback for clients that block HTML) ------------------
+// Pads to the widest label so the column lines up whatever the Slovak wording is.
+function textRows(pairs) {
+  const w = Math.max(...pairs.map(([k]) => k.length));
+  return pairs.map(([k, v]) => `  ${(k + ':').padEnd(w + 2)}${String(v).padStart(8)}`);
+}
+
+function textList(rows, unit) {
+  if (!rows.length) return ['   (zatiaľ žiadne údaje)'];
   const width = Math.min(40, Math.max(...rows.map((r) => r.name.length)));
   return rows.map((r, i) => {
     const name = r.name.length > width ? `${r.name.slice(0, width - 1)}…` : r.name.padEnd(width);
     return `  ${String(i + 1).padStart(2)}. ${name}  ${String(num(r.value)).padStart(6)} ${unit}`;
   });
+}
+
+// ---- HTML part --------------------------------------------------------------
+// Table-based with inline styles: the client reads mail in Apple Mail/iCloud,
+// and Outlook ignores <style> blocks and modern layout entirely.
+function metric(label, help, value) {
+  return `
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px solid ${LINE};">
+        <div style="font:600 22px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};">${value}</div>
+        <div style="font:600 13px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${BODY};padding-top:3px;">${label}</div>
+        <div style="font:400 12px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${MUTED};padding-top:2px;">${help}</div>
+      </td>
+    </tr>`;
+}
+
+function htmlList(rows, unit) {
+  if (!rows.length) {
+    return `<tr><td style="font:400 13px/1.5 -apple-system,sans-serif;color:${MUTED};padding:8px 0;">Zatiaľ žiadne údaje za toto obdobie.</td></tr>`;
+  }
+  return rows.map((r, i) => `
+    <tr>
+      <td style="font:400 13px/1.5 -apple-system,sans-serif;color:${MUTED};padding:7px 8px 7px 0;width:18px;">${i + 1}.</td>
+      <td style="font:400 13px/1.5 -apple-system,sans-serif;color:${BODY};padding:7px 0;word-break:break-all;">${esc(r.name)}</td>
+      <td style="font:600 13px/1.5 -apple-system,sans-serif;color:${INK};padding:7px 0 7px 12px;text-align:right;white-space:nowrap;">${num(r.value)} <span style="font-weight:400;color:${MUTED};">${unit}</span></td>
+    </tr>`).join('');
+}
+
+function section(title, subtitle) {
+  return `
+    <tr><td style="padding:30px 0 4px;">
+      <div style="font:600 11px/1.3 -apple-system,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${ICE};">${title}</div>
+      <div style="font:400 12px/1.5 -apple-system,sans-serif;color:${MUTED};padding-top:4px;">${subtitle}</div>
+    </td></tr>`;
 }
 
 // ---- API --------------------------------------------------------------------
@@ -177,53 +236,112 @@ async function main() {
     .map((r) => ({ name: r.keys[0], value: r.clicks }))
     .sort((a, b) => b.value - a.value);
 
+  const period = `${startDate.split('-').reverse().join('. ')} – ${endDate.split('-').reverse().join('. ')}`;
+  const generated = new Date().toLocaleDateString('sk-SK', { day: 'numeric', month: 'long', year: 'numeric' });
+
   const text = [
-    `STEVANO — Monthly Website Report — ${label}`,
-    `(${startDate} to ${endDate})`,
+    `STEVANO — Mesačný prehľad webu — ${label}`,
+    `Obdobie: ${period}`,
     '',
-    'GOOGLE ANALYTICS (GA4)',
-    `  Sessions:   ${num(sessions).padStart(8)}`,
-    `  Users:      ${num(users).padStart(8)}`,
-    `  Pageviews:  ${num(views).padStart(8)}`,
+    'NÁVŠTEVNOSŤ WEBU (Google Analytics)',
+    ...textRows([[T.sessions[0], num(sessions)], [T.users[0], num(users)], [T.views[0], num(views)]]),
     '',
-    '  Top pages:',
-    ...list(pages, 'views'),
+    '  Najnavštevovanejšie stránky:',
+    ...textList(pages, 'zobrazení'),
     '',
-    'SEARCH CONSOLE',
-    `  Clicks:        ${num(gsc.clicks).padStart(8)}`,
-    `  Impressions:   ${num(gsc.impressions).padStart(8)}`,
-    `  CTR:           ${pct(gsc.ctr).padStart(8)}`,
-    `  Avg. position: ${dec(gsc.position).padStart(8)}`,
+    'VYHĽADÁVANIE NA GOOGLE (Search Console)',
+    ...textRows([
+      [T.clicks[0], num(gsc.clicks)], [T.impressions[0], num(gsc.impressions)],
+      [T.ctr[0], pct(gsc.ctr)], [T.position[0], dec(gsc.position)],
+    ]),
     '',
-    '  Top queries:',
-    ...list(queries, 'clicks'),
+    '  Najčastejšie vyhľadávané výrazy:',
+    ...textList(queries, 'kliknutí'),
     '',
-    `— generated automatically on ${new Date().toISOString().slice(0, 10)} —`,
+    'ČO ZNAMENAJÚ ČÍSLA',
+    ...Object.values(T).map(([k, v]) => `  ${k} — ${v}`),
+    '',
+    `Automaticky generované ${generated}. Zdroj: Google Analytics 4 a Google Search Console.`,
   ].join('\n');
+
+  // Full document with an explicit charset: the Slovak diacritics turn to
+  // mojibake in any client that falls back to Latin-1 without it.
+  const html = `<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>STEVANO — prehľad webu za ${label}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f5f6;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f6;padding:24px 12px;">
+ <tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:10px;overflow:hidden;">
+
+   <tr><td style="background:${INK};padding:26px 28px;">
+     <div style="font:600 15px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:.22em;color:#ffffff;">STEVANO</div>
+     <div style="font:400 13px/1.4 -apple-system,sans-serif;color:${ICE};padding-top:9px;">Mesačný prehľad webu</div>
+     <div style="font:600 20px/1.3 -apple-system,sans-serif;color:#ffffff;padding-top:2px;text-transform:capitalize;">${label}</div>
+     <div style="font:400 12px/1.4 -apple-system,sans-serif;color:#8b949e;padding-top:6px;">${period}</div>
+   </td></tr>
+
+   <tr><td style="padding:0 28px 28px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+     ${section('Návštevnosť webu', 'Koľko ľudí navštívilo web a čo si prezerali. Zdroj: Google Analytics.')}
+     ${metric(T.sessions[0], T.sessions[1], num(sessions))}
+     ${metric(T.users[0], T.users[1], num(users))}
+     ${metric(T.views[0], T.views[1], num(views))}
+    </table>
+
+    <div style="font:600 13px/1.4 -apple-system,sans-serif;color:${BODY};padding:22px 0 2px;">Najnavštevovanejšie stránky</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${htmlList(pages, 'zobrazení')}</table>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+     ${section('Vyhľadávanie na Google', 'Ako si web vedie vo výsledkoch vyhľadávania. Zdroj: Google Search Console.')}
+     ${metric(T.clicks[0], T.clicks[1], num(gsc.clicks))}
+     ${metric(T.impressions[0], T.impressions[1], num(gsc.impressions))}
+     ${metric(T.ctr[0], T.ctr[1], pct(gsc.ctr))}
+     ${metric(T.position[0], T.position[1], dec(gsc.position))}
+    </table>
+
+    <div style="font:600 13px/1.4 -apple-system,sans-serif;color:${BODY};padding:22px 0 2px;">Najčastejšie vyhľadávané výrazy</div>
+    <div style="font:400 12px/1.5 -apple-system,sans-serif;color:${MUTED};padding-bottom:4px;">Slová, ktoré ľudia zadali do Google a následne uvideli váš web.</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${htmlList(queries, 'kliknutí')}</table>
+   </td></tr>
+
+   <tr><td style="background:#fafbfb;border-top:1px solid ${LINE};padding:16px 28px;">
+     <div style="font:400 11px/1.6 -apple-system,sans-serif;color:${MUTED};">
+       Automaticky generované ${generated}. Zdroj údajov: Google Analytics 4 a Google Search Console.
+     </div>
+   </td></tr>
+
+  </table>
+ </td></tr>
+</table>
+</body>
+</html>`;
 
   if (DRY) {
     console.log(text);
+    if (argv.includes('--html')) writeFileSync(join(ROOT, 'report-preview.html'), html);
     return;
   }
 
-  const from = loadEnv('REPORT_FROM') || loadEnv('CONTACT_FROM') || 'STEVANO website <onboarding@resend.dev>';
+  const from = loadEnv('REPORT_FROM') || loadEnv('CONTACT_FROM') || 'STEVANO <onboarding@resend.dev>';
   const to = env.REPORT_TO.split(',').map((s) => s.trim()).filter(Boolean);
 
   const resend = new Resend(env.RESEND_API_KEY);
   const { data, error } = await resend.emails.send({
     from,
     to,
-    subject: `STEVANO — website report — ${label}`,
+    subject: `STEVANO — prehľad webu za ${label}`,
     text,
-    html: `<pre style="font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#14171A;">${text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')}</pre>`,
+    html,
   });
   if (error) throw new Error(`Resend error: ${JSON.stringify(error)}`);
 
   console.log(`Sent ${label} report to ${to.join(', ')} (id ${data?.id})`);
-  console.log(`GA4: ${num(sessions)} sessions · GSC: ${num(gsc.clicks)} clicks`);
+  console.log(`GA4: ${num(sessions)} návštev · GSC: ${num(gsc.clicks)} kliknutí`);
 }
 
 main().catch((err) => {
