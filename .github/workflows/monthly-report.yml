@@ -1,0 +1,33 @@
+# Emails the client a monthly GA4 + Search Console summary.
+# Runs on the 3rd, not the 1st: Search Console data lags a couple of days, so
+# querying earlier risks reporting an incomplete month.
+name: Monthly Report
+
+on:
+  schedule:
+    - cron: '7 6 3 * *' # 06:07 UTC on the 3rd — off-peak, GitHub delays cron at :00
+  workflow_dispatch: {}
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate and send monthly report
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REPORT_TO: ${{ secrets.REPORT_TO }}
+          REPORT_FROM: ${{ secrets.REPORT_FROM }}
+        run: node scripts/monthly-report.mjs
