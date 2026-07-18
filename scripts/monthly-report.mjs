@@ -32,6 +32,9 @@ const ROOT = join(__dirname, '..');
 // ---- args -------------------------------------------------------------------
 const argv = process.argv.slice(2);
 const DRY = argv.includes('--dry');
+// --sample skips the Google APIs and uses representative fixed data, so the
+// exact report layout can be previewed (or emailed) without GA4/GSC credentials.
+const SAMPLE = argv.includes('--sample');
 const monthArg = argv.find((a) => a.startsWith('--month'));
 let month = null;
 if (monthArg) {
@@ -52,7 +55,7 @@ function loadEnv(name) {
   return null;
 }
 
-const REQUIRED = ['GOOGLE_SERVICE_ACCOUNT_KEY', 'GA4_PROPERTY_ID', 'GSC_SITE_URL'];
+const REQUIRED = SAMPLE ? [] : ['GOOGLE_SERVICE_ACCOUNT_KEY', 'GA4_PROPERTY_ID', 'GSC_SITE_URL'];
 if (!DRY) REQUIRED.push('RESEND_API_KEY', 'REPORT_TO');
 
 const env = {};
@@ -97,6 +100,13 @@ const { startDate, endDate, label } = monthRange(month);
 // The report goes to the client, who is Slovak and not technical: every metric
 // is labelled in Slovak and carries a one-line plain-language explanation.
 const num = (v) => Number(v || 0).toLocaleString('sk-SK');
+// GA4 returns ISO country codes (SK, CZ, DE…); show the client Slovak country
+// names. Unknown/"(not set)" codes fall back to whatever GA4 sent.
+const countryNames = new Intl.DisplayNames(['sk'], { type: 'region' });
+const countryName = (code) => {
+  if (!code || code === '(not set)') return 'Neznáma krajina';
+  try { return countryNames.of(code) || code; } catch { return code; }
+};
 const pct = (v) => `${(Number(v || 0) * 100).toLocaleString('sk-SK', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %`;
 const dec = (v) => Number(v || 0).toLocaleString('sk-SK', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -186,55 +196,95 @@ async function post(api, url, token, body) {
 
 // ---- main -------------------------------------------------------------------
 async function main() {
-  let key;
-  try {
-    key = JSON.parse(Buffer.from(env.GOOGLE_SERVICE_ACCOUNT_KEY, 'base64').toString('utf8'));
-  } catch {
-    console.error('GOOGLE_SERVICE_ACCOUNT_KEY is not valid base64-encoded JSON.');
-    console.error('Encode the whole service-account key file: base64 -i key.json | pbcopy');
-    process.exit(1);
+  let sessions, users, views, pages, countries, gsc, queries;
+
+  if (SAMPLE) {
+    // Representative fixed data — layout preview only, no Google APIs involved.
+    sessions = '1842'; users = '1517'; views = '4630';
+    pages = [
+      { name: '/', value: '2104' },
+      { name: '/galeria', value: '1187' },
+      { name: '/kontakt', value: '643' },
+      { name: '/o-nas', value: '412' },
+      { name: '/cennik', value: '284' },
+    ];
+    countries = [
+      { name: countryName('SK'), value: '1103' },
+      { name: countryName('CZ'), value: '241' },
+      { name: countryName('AT'), value: '87' },
+      { name: countryName('DE'), value: '52' },
+      { name: countryName('GB'), value: '34' },
+    ];
+    gsc = { clicks: 318, impressions: 9427, ctr: 0.0337, position: 12.4 };
+    queries = [
+      { name: 'stevano', value: 96 },
+      { name: 'stevano ateliér', value: 41 },
+      { name: 'svadobné fotenie', value: 28 },
+      { name: 'fotograf stevano', value: 19 },
+      { name: 'portrétne fotenie', value: 12 },
+    ];
+  } else {
+    let key;
+    try {
+      key = JSON.parse(Buffer.from(env.GOOGLE_SERVICE_ACCOUNT_KEY, 'base64').toString('utf8'));
+    } catch {
+      console.error('GOOGLE_SERVICE_ACCOUNT_KEY is not valid base64-encoded JSON.');
+      console.error('Encode the whole service-account key file: base64 -i key.json | pbcopy');
+      process.exit(1);
+    }
+
+    // One credential, both APIs — the scopes ride on the same access token.
+    const jwt = new JWT({
+      email: key.client_email,
+      key: key.private_key,
+      scopes: [
+        'https://www.googleapis.com/auth/analytics.readonly',
+        'https://www.googleapis.com/auth/webmasters.readonly',
+      ],
+    });
+    const { token } = await jwt.getAccessToken();
+
+    const GA4 = `https://analyticsdata.googleapis.com/v1beta/properties/${env.GA4_PROPERTY_ID}:runReport`;
+    const GSC = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(env.GSC_SITE_URL)}/searchAnalytics/query`;
+
+    const [gaTotals, gaPages, gaCountries, gscTotals, gscQueries] = await Promise.all([
+      post('GA4', GA4, token, {
+        dateRanges: [{ startDate, endDate }],
+        metrics: [{ name: 'sessions' }, { name: 'activeUsers' }, { name: 'screenPageViews' }],
+      }),
+      post('GA4', GA4, token, {
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'pagePath' }],
+        metrics: [{ name: 'screenPageViews' }],
+        orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+        limit: 5,
+      }),
+      post('GA4', GA4, token, {
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: 'countryId' }], // ISO code, translated to Slovak below
+        metrics: [{ name: 'activeUsers' }],
+        orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+        limit: 5,
+      }),
+      post('Search Console', GSC, token, { startDate, endDate, dimensions: [] }),
+      post('Search Console', GSC, token, { startDate, endDate, dimensions: ['query'], rowLimit: 5 }),
+    ]);
+
+    [sessions, users, views] = gaTotals.rows?.[0]?.metricValues?.map((m) => m.value) ?? [];
+    pages = (gaPages.rows ?? []).map((r) => ({
+      name: r.dimensionValues[0].value,
+      value: r.metricValues[0].value,
+    }));
+    countries = (gaCountries.rows ?? []).map((r) => ({
+      name: countryName(r.dimensionValues[0].value),
+      value: r.metricValues[0].value,
+    }));
+
+    gsc = gscTotals.rows?.[0] ?? {};
+    queries = (gscQueries.rows ?? [])
+      .map((r) => ({ name: r.keys[0], value: r.clicks }))
+      .sort((a, b) => b.value - a.value);
   }
-
-  // One credential, both APIs — the scopes ride on the same access token.
-  const jwt = new JWT({
-    email: key.client_email,
-    key: key.private_key,
-    scopes: [
-      'https://www.googleapis.com/auth/analytics.readonly',
-      'https://www.googleapis.com/auth/webmasters.readonly',
-    ],
-  });
-  const { token } = await jwt.getAccessToken();
-
-  const GA4 = `https://analyticsdata.googleapis.com/v1beta/properties/${env.GA4_PROPERTY_ID}:runReport`;
-  const GSC = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(env.GSC_SITE_URL)}/searchAnalytics/query`;
-
-  const [gaTotals, gaPages, gscTotals, gscQueries] = await Promise.all([
-    post('GA4', GA4, token, {
-      dateRanges: [{ startDate, endDate }],
-      metrics: [{ name: 'sessions' }, { name: 'activeUsers' }, { name: 'screenPageViews' }],
-    }),
-    post('GA4', GA4, token, {
-      dateRanges: [{ startDate, endDate }],
-      dimensions: [{ name: 'pagePath' }],
-      metrics: [{ name: 'screenPageViews' }],
-      orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
-      limit: 5,
-    }),
-    post('Search Console', GSC, token, { startDate, endDate, dimensions: [] }),
-    post('Search Console', GSC, token, { startDate, endDate, dimensions: ['query'], rowLimit: 5 }),
-  ]);
-
-  const [sessions, users, views] = gaTotals.rows?.[0]?.metricValues?.map((m) => m.value) ?? [];
-  const pages = (gaPages.rows ?? []).map((r) => ({
-    name: r.dimensionValues[0].value,
-    value: r.metricValues[0].value,
-  }));
-
-  const gsc = gscTotals.rows?.[0] ?? {};
-  const queries = (gscQueries.rows ?? [])
-    .map((r) => ({ name: r.keys[0], value: r.clicks }))
-    .sort((a, b) => b.value - a.value);
 
   const period = `${startDate.split('-').reverse().join('. ')} – ${endDate.split('-').reverse().join('. ')}`;
   const generated = new Date().toLocaleDateString('sk-SK', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -248,6 +298,9 @@ async function main() {
     '',
     '  Najnavštevovanejšie stránky:',
     ...textList(pages, 'zobrazení'),
+    '',
+    '  Odkiaľ návštevníci prichádzajú (krajiny):',
+    ...textList(countries, 'návštevníkov'),
     '',
     'VYHĽADÁVANIE NA GOOGLE (Search Console)',
     ...textRows([
@@ -295,6 +348,10 @@ async function main() {
 
     <div style="font:600 13px/1.4 -apple-system,sans-serif;color:${BODY};padding:22px 0 2px;">Najnavštevovanejšie stránky</div>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${htmlList(pages, 'zobrazení')}</table>
+
+    <div style="font:600 13px/1.4 -apple-system,sans-serif;color:${BODY};padding:22px 0 2px;">Odkiaľ návštevníci prichádzajú</div>
+    <div style="font:400 12px/1.5 -apple-system,sans-serif;color:${MUTED};padding-bottom:4px;">Krajiny, z ktorých sa ľudia pripájali na web (podľa polohy pripojenia).</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${htmlList(countries, 'návštevníkov')}</table>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
      ${section('Vyhľadávanie na Google', 'Ako si web vedie vo výsledkoch vyhľadávania. Zdroj: Google Search Console.')}
